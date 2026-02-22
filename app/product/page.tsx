@@ -18,17 +18,6 @@ export default function ProductDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-purple-500/30">
-            {/* Header / Nav Placeholder */}
-            <nav className="p-6 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
-                <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-                    SANAJRI
-                </Link>
-                <div className="flex space-x-8 text-sm text-gray-400">
-                    <Link href="#" className="hover:text-white transition-colors">Collections</Link>
-                    <Link href="#" className="hover:text-white transition-colors">About</Link>
-                    <Link href="/checkout" className="hover:text-white transition-colors">Cart (1)</Link>
-                </div>
-            </nav>
 
             <main className="max-w-7xl mx-auto px-4 py-12 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 {/* Image Gallery Section */}

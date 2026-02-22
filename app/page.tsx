@@ -5,25 +5,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-purple-500/30 overflow-hidden">
+    <div className="relative min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-purple-500/30 overflow-hidden">
       {/* Background Glows */}
       <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-purple-600/10 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/4" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-pink-600/10 blur-[150px] rounded-full translate-y-1/3 -translate-x-1/4" />
 
-      {/* Navigation */}
-      <nav className="relative z-10 max-w-7xl mx-auto p-8 flex justify-between items-center">
-        <div className="text-3xl font-black tracking-tighter bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-          SANAJRI
-        </div>
-        <div className="hidden md:flex space-x-12 items-center text-sm font-medium tracking-widest text-gray-400 uppercase">
-          <Link href="/product" className="hover:text-white transition-all">Shop</Link>
-          <Link href="#" className="hover:text-white transition-all">Atelier</Link>
-          <Link href="#" className="hover:text-white transition-all">Heritage</Link>
-          <Link href="/checkout" className="bg-white/5 border border-white/10 px-6 py-2 rounded-full hover:bg-white/10 transition-all text-white">
-            Cart
-          </Link>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <main className="relative z-10 max-w-7xl mx-auto px-8 pt-20 pb-32 flex flex-col items-center text-center">
@@ -78,14 +64,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Floating Elements for Premium Feel */}
-      <div className="fixed bottom-10 right-10 z-50">
-        <button className="w-16 h-16 bg-gradient-to-tr from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg hover:rotate-12 transition-transform">
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-        </button>
-      </div>
+
 
       <footer className="py-20 text-center border-t border-white/5 relative z-10">
         <p className="text-gray-600 text-sm tracking-widest uppercase mb-4">Crafted with passion in Paris & Mumbai</p>

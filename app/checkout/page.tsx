@@ -12,6 +12,7 @@ export default function CheckoutPage() {
         pincode: "",
         state: "",
         paymentMethod: "razorpay",
+        agreedToPolicies: false,
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -77,6 +78,7 @@ export default function CheckoutPage() {
         if (!formData.pincode.match(/^\d{6}$/))
             newErrors.pincode = "Enter a valid 6-digit pincode";
         if (!formData.state.trim()) newErrors.state = "State is required";
+        if (!formData.agreedToPolicies) newErrors.agreedToPolicies = "You must agree to the Refund & Return Policy";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -119,8 +121,8 @@ export default function CheckoutPage() {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                 amount: order.amount,
                 currency: order.currency,
-                name: "Sanajri Luxury",
-                description: "Premium Essence Purchase",
+                name: "Sanjari Herbal Hair Oil",
+                description: "Authentic Ayurvedic Hair Care",
                 order_id: order.id,
                 handler: async function (response: any) {
                     const verifyRes = await fetch("/api/verify-payment", {
@@ -166,8 +168,9 @@ export default function CheckoutPage() {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const { name, value, type } = e.target as HTMLInputElement;
+        const val = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+        setFormData((prev) => ({ ...prev, [name]: val }));
         if (errors[name]) {
             setErrors((prev) => {
                 const newErrs = { ...prev };
@@ -285,6 +288,29 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
+                            <div className="pt-2">
+                                <label className="flex items-start space-x-3 cursor-pointer group">
+                                    <div className="pt-1">
+                                        <input
+                                            type="checkbox"
+                                            name="agreedToPolicies"
+                                            checked={formData.agreedToPolicies}
+                                            onChange={handleChange}
+                                            className="w-5 h-5 rounded border-white/10 bg-white/5 text-purple-600 focus:ring-purple-500 transition-all cursor-pointer"
+                                        />
+                                    </div>
+                                    <span className="text-sm text-gray-300 leading-relaxed group-hover:text-white transition-colors">
+                                        I agree to the{" "}
+                                        <Link href="/refund-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Refund Policy</Link>
+                                        ,{" "}
+                                        <Link href="/return-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Return Policy</Link>
+                                        {" "}and{" "}
+                                        <Link href="/cancellation-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Cancellation Policy</Link>.
+                                    </span>
+                                </label>
+                                {errors.agreedToPolicies && <p className="text-red-500 text-xs mt-2">{errors.agreedToPolicies}</p>}
+                            </div>
+
                             <button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                                 {isSubmitting ? <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <span>Complete Purchase</span>}
                             </button>
@@ -300,8 +326,8 @@ export default function CheckoutPage() {
                                         <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="font-medium">Premium Essence</h3>
-                                        <p className="text-sm text-gray-400">Quantity: 1</p>
+                                        <h3 className="font-medium">Sanjari Herbal Hair Oil</h3>
+                                        <p className="text-sm text-gray-400">100ml Bottle · Quantity: 1</p>
                                     </div>
                                     <span className="font-bold">₹349</span>
                                 </div>

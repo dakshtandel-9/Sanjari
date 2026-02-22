@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -87,16 +87,6 @@ function SuccessContent() {
                 </div>
             </div>
 
-            {/* ── What happens next ── */}
-            <div className="succ__steps">
-                <p className="succ__steps-label">What Happens Next</p>
-                <div className="succ__steps-list">
-                    <Step icon="📦" title="Order Packed" desc="Your bottle is carefully packed in 1–2 business days." />
-                    <Step icon="🚚" title="Shipped" desc="Tracking details sent to your phone once dispatched." />
-                    <Step icon="🏠" title="Delivered" desc="Delivered to your door in 5–8 business days." />
-                </div>
-            </div>
-
             {/* ── COD notice ── */}
             <div className="succ__cod-notice">
                 <span className="succ__cod-icon">📞</span>
@@ -110,9 +100,6 @@ function SuccessContent() {
             <div className="succ__actions">
                 <Link href="/" className="succ__btn succ__btn--primary">
                     ← Back to Home
-                </Link>
-                <Link href="/shipping-policy" className="succ__btn succ__btn--ghost">
-                    Shipping Policy
                 </Link>
             </div>
 
@@ -148,18 +135,6 @@ export default function SuccessPage() {
             <div className="succ__bg-blob succ__bg-blob--3" aria-hidden="true" />
 
             <div className="succ__wrap">
-                {/* Logo */}
-                <Link href="/" className="succ__logo-link" aria-label="Sanjari Home">
-                    <Image
-                        src="/SANJARI.png"
-                        alt="Sanjari"
-                        width={110}
-                        height={35}
-                        className="succ__logo"
-                        priority
-                    />
-                </Link>
-
                 <div className="succ__box">
                     <Suspense
                         fallback={

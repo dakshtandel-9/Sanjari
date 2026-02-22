@@ -99,7 +99,7 @@ export default function Footer() {
                         <h3 className="ftr__heading">Quick Links</h3>
                         <nav className="ftr__nav" aria-label="Quick links">
                             <FLink href="/">Home</FLink>
-                            <FLink href="/#product">Product</FLink>
+                            <FLink href="/product">Product</FLink>
                             <FLink href="/#benefits">Benefits</FLink>
                             <FLink href="/#how-it-works">How It Works</FLink>
                             <FLink href="/#reviews">Reviews</FLink>
@@ -173,7 +173,7 @@ export default function Footer() {
                     </div>
                     <AccordionGroup title="Quick Links">
                         <FLink href="/">Home</FLink>
-                        <FLink href="/#product">Product</FLink>
+                        <FLink href="/product">Product</FLink>
                         <FLink href="/#benefits">Benefits</FLink>
                         <FLink href="/#how-it-works">How It Works</FLink>
                         <FLink href="/#reviews">Reviews</FLink>

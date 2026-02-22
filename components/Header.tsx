@@ -16,7 +16,8 @@ const OFFERS = [
 /* ─── Nav links ─── */
 const NAV = [
     { label: "Home", href: "/" },
-    { label: "Product", href: "/#product" },
+    { label: "Product", href: "/product" },
+
     { label: "Benefits", href: "/#benefits" },
     { label: "How To Use", href: "/#how-to-use" },
     { label: "Reviews", href: "/#reviews" },

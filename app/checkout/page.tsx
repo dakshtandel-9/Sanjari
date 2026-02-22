@@ -303,6 +303,8 @@ export default function CheckoutPage() {
                                     </div>
                                     <span className="text-sm text-gray-300 leading-relaxed group-hover:text-white transition-colors">
                                         I agree to the{" "}
+                                        <Link href="/terms" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Terms & Conditions</Link>
+                                        ,{" "}
                                         <Link href="/refund-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Refund Policy</Link>
                                         ,{" "}
                                         <Link href="/return-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4" target="_blank">Return Policy</Link>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /* ─────────────────────────── DATA ─────────────────────────── */
 const INGREDIENTS = [
@@ -53,12 +53,14 @@ function Stars({ count }: { count: number }) {
 export default function ProductPage() {
     const [qty, setQty] = useState(1);
     const [coupon, setCoupon] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
     const [discount, setDiscount] = useState(0);
     const [couponMsg, setCouponMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [activeImg, setActiveImg] = useState(0);
 
     const total = Math.max(0, ITEM_PRICE * qty - discount);
+
 
     const applyCoupon = async () => {
         if (!coupon.trim()) { setCouponMsg({ type: "err", text: "Enter a coupon code." }); return; }
@@ -68,11 +70,10 @@ export default function ProductPage() {
             const code = coupon.trim().toUpperCase();
             const found = (data.coupons || []).find((c: any) => c.code.toUpperCase() === code && c.is_active);
             if (found) {
-                const disc = found.type === "percentage" ? Math.round((ITEM_PRICE * qty) * found.discount_value / 100) : found.discount_value;
-                setDiscount(disc);
-                setCouponMsg({ type: "ok", text: `Applied! -₹${disc} off` });
+                setAppliedCoupon(found);
                 localStorage.setItem("sanjari_coupon", code);
             } else {
+                setAppliedCoupon(null);
                 setDiscount(0);
                 setCouponMsg({ type: "err", text: "Invalid or inactive coupon." });
                 localStorage.removeItem("sanjari_coupon");
@@ -81,6 +82,18 @@ export default function ProductPage() {
             setCouponMsg({ type: "err", text: "Could not check coupon. Try at checkout." });
         }
     };
+
+    // Auto-recalculate discount when qty or appliedCoupon changes
+    useEffect(() => {
+        if (appliedCoupon) {
+            const disc = appliedCoupon.type === "percentage"
+                ? Math.round((ITEM_PRICE * qty) * appliedCoupon.discount_value / 100)
+                : appliedCoupon.discount_value;
+            setDiscount(disc);
+            setCouponMsg({ type: "ok", text: `Applied! -₹${disc} off` });
+        }
+    }, [qty, appliedCoupon]);
+
 
     const buyNow = () => {
         localStorage.setItem("sanjari_qty", qty.toString());

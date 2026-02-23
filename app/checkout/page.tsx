@@ -30,9 +30,12 @@ export default function CheckoutPage() {
         type: "success" | "error";
         message: string;
     } | null>(null);
+    const [quantity, setQuantity] = useState(1);
+
 
     /* ─── Config fetch ──────────────────────────────────────────────────── */
     useEffect(() => {
+        // Fetch config
         fetch("/api/admin/config")
             .then(res => res.json())
             .then(data => {
@@ -43,12 +46,24 @@ export default function CheckoutPage() {
                     });
                 }
             });
+
+        // Sync quantity
+        const savedQty = localStorage.getItem("sanjari_qty");
+        if (savedQty) {
+            const parsed = parseInt(savedQty);
+            if (!isNaN(parsed) && parsed > 0) {
+                setQuantity(parsed);
+            }
+        }
     }, []);
+
 
     /* ─── Derived prices ────────────────────────────────────────────────── */
     const itemPrice = 349;
+    const subtotal = itemPrice * quantity;
     const shippingFee = formData.paymentMethod === "cod" ? config.shipping_charge : 0;
-    const totalPrice = Math.max(0, itemPrice + shippingFee - discount);
+    const totalPrice = Math.max(0, subtotal + shippingFee - discount);
+
 
     /* ─── Coupon ────────────────────────────────────────────────────────── */
     const applyCoupon = () => {
@@ -56,10 +71,11 @@ export default function CheckoutPage() {
         const found = config.coupons.find(c => c.code.toUpperCase() === code && c.is_active);
         if (found) {
             const disc = found.type === "percentage"
-                ? Math.round(itemPrice * (found.discount_value / 100))
+                ? Math.round(subtotal * (found.discount_value / 100))
                 : found.discount_value;
             setDiscount(disc);
             setCouponStatus({ type: "success", message: `Applied! Discount: -₹${disc}` });
+
         } else if (!code) {
             setCouponStatus({ type: "error", message: "Please enter a code." });
         } else {
@@ -380,9 +396,10 @@ export default function CheckoutPage() {
                                 <div className="co__product-img">🌿</div>
                                 <div className="co__product-info">
                                     <strong className="co__product-name">Sanjari Herbal Hair Oil</strong>
-                                    <span className="co__product-sub">100ml Bottle · Qty: 1</span>
+                                    <span className="co__product-sub">100ml Bottle · Qty: {quantity}</span>
                                 </div>
-                                <span className="co__product-price">₹349</span>
+                                <span className="co__product-price">₹{subtotal}</span>
+
                             </div>
 
                             {/* Coupon */}
@@ -410,8 +427,9 @@ export default function CheckoutPage() {
                             <div className="co__price-list">
                                 <div className="co__price-row">
                                     <span>Subtotal</span>
-                                    <span>₹{itemPrice}</span>
+                                    <span>₹{subtotal}</span>
                                 </div>
+
                                 {discount > 0 && (
                                     <div className="co__price-row co__price-row--discount">
                                         <span>Coupon Discount</span>

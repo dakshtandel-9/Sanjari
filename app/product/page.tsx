@@ -81,6 +81,7 @@ export default function ProductPage() {
     };
 
     const buyNow = () => {
+        localStorage.setItem("sanjari_qty", qty.toString());
         window.location.href = "/checkout";
     };
 

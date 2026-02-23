@@ -11,13 +11,25 @@ function SuccessContent() {
     const [checkDrawn, setCheckDrawn] = useState(false);
     const searchParams = useSearchParams();
     const orderId = searchParams.get("order_id");
+    const [quantity, setQuantity] = useState(1);
+
 
     useEffect(() => {
+        // Sync quantity
+        const savedQty = localStorage.getItem("sanjari_qty");
+        if (savedQty) {
+            const parsed = parseInt(savedQty);
+            if (!isNaN(parsed) && parsed > 0) {
+                setQuantity(parsed);
+            }
+        }
+
         // stagger the entrance animations
         const t1 = setTimeout(() => setVisible(true), 50);
         const t2 = setTimeout(() => setCheckDrawn(true), 400);
         return () => { clearTimeout(t1); clearTimeout(t2); };
     }, []);
+
 
     return (
         <div className={`succ__inner ${visible ? "succ__inner--visible" : ""}`}>
@@ -83,8 +95,9 @@ function SuccessContent() {
                 </div>
                 <div className="succ__row succ__row--last">
                     <span className="succ__row-label">Product</span>
-                    <span className="succ__row-val">Sanjari Herbal Hair Oil</span>
+                    <span className="succ__row-val">Sanjari Herbal Hair Oil {quantity > 1 ? `(Qty: ${quantity})` : ""}</span>
                 </div>
+
             </div>
 
             {/* ── COD notice ── */}

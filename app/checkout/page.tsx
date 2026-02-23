@@ -40,10 +40,22 @@ export default function CheckoutPage() {
             .then(res => res.json())
             .then(data => {
                 if (data.settings) {
+                    const coupons = data.coupons || [];
                     setConfig({
                         shipping_charge: parseInt(data.settings.shipping_charge || "60"),
-                        coupons: data.coupons || [],
+                        coupons: coupons,
                     });
+
+                    // Check for persisted coupon from product page
+                    const savedCoupon = localStorage.getItem("sanjari_coupon");
+                    if (savedCoupon) {
+                        setCouponInput(savedCoupon);
+                        // Trigger application after state updates
+                        setTimeout(() => {
+                            const btn = document.querySelector(".co__coupon-btn") as HTMLButtonElement;
+                            if (btn) btn.click();
+                        }, 100);
+                    }
                 }
             });
 
@@ -57,6 +69,15 @@ export default function CheckoutPage() {
         }
     }, []);
 
+    // Re-verify coupon if quantity changes (for percentage discounts)
+    useEffect(() => {
+        if (couponStatus?.type === "success") {
+            applyCoupon();
+        }
+        localStorage.setItem("sanjari_qty", quantity.toString());
+    }, [quantity]);
+
+
 
     /* ─── Derived prices ────────────────────────────────────────────────── */
     const itemPrice = 349;
@@ -66,8 +87,8 @@ export default function CheckoutPage() {
 
 
     /* ─── Coupon ────────────────────────────────────────────────────────── */
-    const applyCoupon = () => {
-        const code = couponInput.trim().toUpperCase();
+    const applyCoupon = (forceCode?: string) => {
+        const code = (forceCode || couponInput).trim().toUpperCase();
         const found = config.coupons.find(c => c.code.toUpperCase() === code && c.is_active);
         if (found) {
             const disc = found.type === "percentage"
@@ -75,14 +96,18 @@ export default function CheckoutPage() {
                 : found.discount_value;
             setDiscount(disc);
             setCouponStatus({ type: "success", message: `Applied! Discount: -₹${disc}` });
-
+            localStorage.setItem("sanjari_coupon", code);
         } else if (!code) {
-            setCouponStatus({ type: "error", message: "Please enter a code." });
+            setDiscount(0);
+            setCouponStatus(null);
+            localStorage.removeItem("sanjari_coupon");
         } else {
             setDiscount(0);
             setCouponStatus({ type: "error", message: "Invalid or inactive coupon code." });
+            localStorage.removeItem("sanjari_coupon");
         }
     };
+
 
     /* ─── Validation ────────────────────────────────────────────────────── */
     const validate = () => {
@@ -396,9 +421,17 @@ export default function CheckoutPage() {
                                 <div className="co__product-img">🌿</div>
                                 <div className="co__product-info">
                                     <strong className="co__product-name">Sanjari Herbal Hair Oil</strong>
-                                    <span className="co__product-sub">100ml Bottle · Qty: {quantity}</span>
+                                    <div className="co__qty-wrap">
+                                        <span className="co__product-sub">Qty:</span>
+                                        <div className="co__qty-mini">
+                                            <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="co__qty-btn">-</button>
+                                            <span className="co__qty-val">{quantity}</span>
+                                            <button type="button" onClick={() => setQuantity(quantity + 1)} className="co__qty-btn">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <span className="co__product-price">₹{subtotal}</span>
+
 
                             </div>
 
@@ -412,9 +445,10 @@ export default function CheckoutPage() {
                                         className="co__coupon-input"
                                         onKeyDown={e => e.key === "Enter" && (e.preventDefault(), applyCoupon())}
                                     />
-                                    <button type="button" onClick={applyCoupon} className="co__coupon-btn">
+                                    <button type="button" onClick={() => applyCoupon()} className="co__coupon-btn">
                                         Apply
                                     </button>
+
                                 </div>
                                 {couponStatus && (
                                     <p className={`co__coupon-msg co__coupon-msg--${couponStatus.type}`}>
@@ -799,6 +833,39 @@ export default function CheckoutPage() {
                 .co__product-name { font-size: 0.9rem; font-weight: 700; color: #212121; }
                 .co__product-sub  { font-size: 0.78rem; color: #888; }
                 .co__product-price { font-size: 1rem; font-weight: 800; color: #1a5c2a; }
+
+                /* Quantity controls mini */
+                .co__qty-wrap { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+                .co__qty-mini {
+                    display: flex;
+                    align-items: center;
+                    background: #f1f8f1;
+                    border: 1px solid #C8E6C9;
+                    border-radius: 8px;
+                    overflow: hidden;
+                }
+                .co__qty-btn {
+                    width: 24px; height: 24px;
+                    background: none;
+                    border: none;
+                    font-size: 0.9rem;
+                    font-weight: 700;
+                    color: #2d8a3e;
+                    cursor: pointer;
+                    display: flex; align-items: center; justify-content: center;
+                    transition: background 0.15s;
+                }
+                .co__qty-btn:hover { background: #E8F5E9; }
+                .co__qty-val {
+                    width: 26px;
+                    text-align: center;
+                    font-size: 0.8rem;
+                    font-weight: 800;
+                    color: #1a5c2a;
+                    border-left: 1px solid #C8E6C9;
+                    border-right: 1px solid #C8E6C9;
+                }
+
 
                 /* Coupon */
                 .co__coupon { margin-bottom: 20px; }

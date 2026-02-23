@@ -68,12 +68,14 @@ export default function ProductPage() {
             const code = coupon.trim().toUpperCase();
             const found = (data.coupons || []).find((c: any) => c.code.toUpperCase() === code && c.is_active);
             if (found) {
-                const disc = found.type === "percentage" ? Math.round(ITEM_PRICE * found.discount_value / 100) : found.discount_value;
+                const disc = found.type === "percentage" ? Math.round((ITEM_PRICE * qty) * found.discount_value / 100) : found.discount_value;
                 setDiscount(disc);
                 setCouponMsg({ type: "ok", text: `Applied! -₹${disc} off` });
+                localStorage.setItem("sanjari_coupon", code);
             } else {
                 setDiscount(0);
                 setCouponMsg({ type: "err", text: "Invalid or inactive coupon." });
+                localStorage.removeItem("sanjari_coupon");
             }
         } catch {
             setCouponMsg({ type: "err", text: "Could not check coupon. Try at checkout." });
@@ -82,6 +84,10 @@ export default function ProductPage() {
 
     const buyNow = () => {
         localStorage.setItem("sanjari_qty", qty.toString());
+        // Ensure applied coupon (if any) is persisted
+        if (couponMsg?.type === "ok") {
+            localStorage.setItem("sanjari_coupon", coupon.trim().toUpperCase());
+        }
         window.location.href = "/checkout";
     };
 

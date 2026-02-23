@@ -135,8 +135,8 @@ export default function TermsPage() {
                     <PolicySection num="12" title="Contact Information"
                         content="For any questions or concerns regarding these Terms:"
                         list={[
-                            { label: "Email", val: "hello@sanajri.in" },
-                            { label: "Phone/WhatsApp", val: "+91 97412 87340" },
+                            { label: "Email", val: "sanjariherbalhairoil@gmail.com" },
+                            { label: "Phone/WhatsApp", val: "+91 78670 78601" },
                         ]}
                     />
 

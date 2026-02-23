@@ -227,7 +227,7 @@ export default function CheckoutPage() {
                                     <Field label="Phone Number" error={errors.phone}>
                                         <input
                                             type="tel" name="phone" value={formData.phone}
-                                            onChange={handleChange} placeholder="9876543210"
+                                            onChange={handleChange} placeholder="7867078601"
                                             className={`co__input${errors.phone ? " co__input--err" : ""}`}
                                         />
                                     </Field>

@@ -61,8 +61,8 @@ export default function NotFound() {
                 {/* Contact nudge */}
                 <p className="nf__contact">
                     Need help?{" "}
-                    <a href="mailto:hello@sanajri.in" className="nf__contact-link">
-                        hello@sanajri.in
+                    <a href="mailto:sanjariherbalhairoil@gmail.com" className="nf__contact-link">
+                        sanjariherbalhairoil@gmail.com
                     </a>
                 </p>
             </div>

@@ -106,7 +106,7 @@ function SuccessContent() {
             {/* ── Footer note ── */}
             <p className="succ__footer-note">
                 Questions? Email us at{" "}
-                <a href="mailto:hello@sanajri.in" className="succ__email">hello@sanajri.in</a>
+                <a href="mailto:sanjariherbalhairoil@gmail.com" className="succ__email">sanjariherbalhairoil@gmail.com</a>
             </p>
         </div>
     );

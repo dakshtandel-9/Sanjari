@@ -97,8 +97,8 @@ export default function ReturnPolicyPage() {
                         title="Contact for Return Claims"
                         content="To initiate a damage claim, contact us at:"
                         list={[
-                            { label: "Email", val: "hello@sanajri.in" },
-                            { label: "WhatsApp/Call", val: "+91 97412 87340" }
+                            { label: "Email", val: "sanjariherbalhairoil@gmail.com" },
+                            { label: "WhatsApp/Call", val: "+91 78670 78601" }
                         ]}
                         footer="Please include your Order ID and clear images/video proof."
                     />

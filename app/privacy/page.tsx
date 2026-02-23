@@ -118,7 +118,7 @@ export default function PrivacyPolicyPage() {
                             { label: "Correction", val: "Update inaccurate information" },
                             { label: "Deletion", val: "Request removal (where permitted)" },
                         ]}
-                        footer="To exercise any of these rights, please contact us at hello@sanajri.in with your request and order details."
+                        footer="To exercise any of these rights, please contact us at sanjariherbalhairoil@gmail.com with your request and order details."
                     />
 
                     {/* 10 */}
@@ -133,8 +133,8 @@ export default function PrivacyPolicyPage() {
                     <PolicySection num="11" title="Contact Information"
                         content="For any privacy-related concerns or data requests, please reach us at:"
                         list={[
-                            { label: "Email", val: "hello@sanajri.in" },
-                            { label: "Phone/WhatsApp", val: "+91 97412 87340" },
+                            { label: "Email", val: "sanjariherbalhairoil@gmail.com" },
+                            { label: "Phone/WhatsApp", val: "+91 78670 78601" },
                         ]}
                     />
 

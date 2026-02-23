@@ -84,13 +84,14 @@ export default function Footer() {
                         <address className="ftr__address">
                             <p>123, Green Valley, Koramangala</p>
                             <p>Bangalore, Karnataka – 560034</p>
-                            <p><a href="tel:+919876543210">📞 +91 98765 43210</a></p>
-                            <p><a href="mailto:hello@sanjari.in">✉️ hello@sanjari.in</a></p>
+                            <p><a href="tel:+917867078601">📞 +91 78670 78601</a></p>
+                            <p><a href="mailto:sanjariherbalhairoil@gmail.com">✉️ sanjariherbalhairoil@gmail.com</a></p>
+
                         </address>
                         <div className="ftr__social" aria-label="Social media">
                             <a href="https://facebook.com" className="ftr__social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><FacebookIcon /></a>
                             <a href="https://instagram.com" className="ftr__social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><InstagramIcon /></a>
-                            <a href="https://wa.me/919876543210" className="ftr__social-icon ftr__social-icon--wa" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><WhatsappIcon /></a>
+                            <a href="https://wa.me/917867078601" className="ftr__social-icon ftr__social-icon--wa" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><WhatsappIcon /></a>
                         </div>
                     </div>
 
@@ -168,7 +169,7 @@ export default function Footer() {
                         <div className="ftr__social" aria-label="Social media">
                             <a href="https://facebook.com" className="ftr__social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><FacebookIcon /></a>
                             <a href="https://instagram.com" className="ftr__social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><InstagramIcon /></a>
-                            <a href="https://wa.me/919876543210" className="ftr__social-icon ftr__social-icon--wa" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><WhatsappIcon /></a>
+                            <a href="https://wa.me/917867078601" className="ftr__social-icon ftr__social-icon--wa" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><WhatsappIcon /></a>
                         </div>
                     </div>
                     <AccordionGroup title="Quick Links">

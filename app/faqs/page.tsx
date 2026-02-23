@@ -166,10 +166,10 @@ export default function FAQPage() {
                                 Our team is happy to help. Reach out to us directly.
                             </p>
                             <div className="faq__contact-links">
-                                <a href="mailto:hello@sanajri.in" className="faq__contact-btn faq__contact-btn--primary">
-                                    ✉️ hello@sanajri.in
+                                <a href="mailto:sanjariherbalhairoil@gmail.com" className="faq__contact-btn faq__contact-btn--primary">
+                                    ✉️ sanjariherbalhairoil@gmail.com
                                 </a>
-                                <a href="https://wa.me/919741287340" target="_blank" rel="noopener noreferrer"
+                                <a href="https://wa.me/917867078601" target="_blank" rel="noopener noreferrer"
                                     className="faq__contact-btn faq__contact-btn--ghost">
                                     💬 WhatsApp Us
                                 </a>

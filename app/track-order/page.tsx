@@ -250,9 +250,9 @@ export default function TrackOrderPage() {
                         <p className="trk__help-title">Need help with your order?</p>
                         <p className="trk__help-sub">
                             Email us at{" "}
-                            <a href="mailto:hello@sanajri.in" className="trk__link">hello@sanajri.in</a>
+                            <a href="mailto:sanjariherbalhairoil@gmail.com" className="trk__link">sanjariherbalhairoil@gmail.com</a>
                             {" "}or WhatsApp us at{" "}
-                            <a href="https://wa.me/919741287340" target="_blank" rel="noopener noreferrer" className="trk__link">+91 97412 87340</a>
+                            <a href="https://wa.me/917867078601" target="_blank" rel="noopener noreferrer" className="trk__link">+91 78670 78601</a>
                         </p>
                     </div>
                 </div>

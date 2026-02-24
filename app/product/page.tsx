@@ -26,6 +26,11 @@ const REVIEWS = [
     { name: "Ravi K.", city: "Bangalore", stars: 5, text: "My wife recommended this. Honestly didn't expect much but the scalp feels so much better after 3–4 uses. Will order again.", },
     { name: "Anita M.", city: "Delhi", stars: 4, text: "Good herbal oil. Packaging was intact, delivery was on time. Takes time to show results but it's worth it for regular use.", },
     { name: "Suresh P.", city: "Chennai", stars: 5, text: "Very good product. Natural smell, not heavy like other oils. My hair feels stronger. COD option made it easy to order.", },
+    { name: "Meera K.", city: "Hyderabad", stars: 5, text: "I was skeptical but this oil is actually quite good. My hair feels much softer and the frizz is under control.", },
+    { name: "Arjun V.", city: "Kochi", stars: 5, text: "Strong herbal scent which I personally love. It feels like real Ayurveda. Great for scalp health.", },
+    { name: "Sunita R.", city: "Pune", stars: 5, text: "Best hair oil I've used so far. The packaging is premium and the product is even better. My hair fall has decreased significantly.", },
+    { name: "Vikram S.", city: "Jaipur", stars: 4, text: "Decent product. Takes a bit of time to wash off because it's thick, but the results are good. Smells like herbs.", },
+    { name: "Kavita B.", city: "Ahmedabad", stars: 5, text: "Value for money! You get a good quantity for the price, and the quality is top-notch. Seeing less hair on my brush now.", },
 ];
 
 const FAQS_SHORT = [
@@ -166,7 +171,7 @@ export default function ProductPage() {
                         {/* Stars */}
                         <div className="pd__rating-row">
                             <Stars count={5} />
-                            <span className="pd__rating-count">(47 reviews)</span>
+                            <span className="pd__rating-count">(142 reviews)</span>
                         </div>
 
                         {/* Price */}
@@ -358,7 +363,7 @@ export default function ProductPage() {
                         <div className="pd__reviews-score">5.0</div>
                         <div>
                             <Stars count={5} />
-                            <p className="pd__reviews-count">Based on 47 verified purchases</p>
+                            <p className="pd__reviews-count">Based on 142 verified purchases</p>
                         </div>
                     </div>
                     <div className="pd__reviews-grid">

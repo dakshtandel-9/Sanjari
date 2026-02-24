@@ -104,7 +104,21 @@ export default function ProductPage() {
         window.location.href = "/checkout";
     };
 
-    const THUMBNAILS = ["/product-hero.png", "/product-hero.png", "/product-hero.png"];
+    const THUMBNAILS = [
+        "/productImages/1.svg",
+        "/productImages/2.svg",
+        "/productImages/3.svg",
+        "/productImages/4.svg",
+        "/productImages/5.svg"
+    ];
+
+    // Auto-cycle banner image every 3 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveImg((prev) => (prev + 1) % THUMBNAILS.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="pd__page">
@@ -119,7 +133,7 @@ export default function ProductPage() {
                     <div className="pd__gallery">
                         <div className="pd__main-img-wrap">
                             <Image
-                                src="/product-hero.png"
+                                src={THUMBNAILS[activeImg]}
                                 alt="Sanjari Herbal Hair Oil 100ml"
                                 fill
                                 className="pd__main-img"

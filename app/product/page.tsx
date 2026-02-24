@@ -360,7 +360,7 @@ export default function ProductPage() {
                     <span className="pd__sec-badge">What Customers Say</span>
                     <h2 className="pd__sec-title">Customer Reviews</h2>
                     <div className="pd__reviews-summary">
-                        <div className="pd__reviews-score">5.0</div>
+                        <div className="pd__reviews-score">4.6</div>
                         <div>
                             <Stars count={5} />
                             <p className="pd__reviews-count">Based on 142 verified purchases</p>
@@ -385,37 +385,6 @@ export default function ProductPage() {
                 </div>
             </section>
 
-            {/* ══════════════════════════════════════════════
-                SECTION 7 — SHIPPING INFO
-            ══════════════════════════════════════════════ */}
-            <section className="pd__section pd__section--green" id="shipping">
-                <div className="pd__section-inner pd__section-inner--narrow">
-                    <span className="pd__sec-badge">Delivery</span>
-                    <h2 className="pd__sec-title">Shipping Information</h2>
-                    <div className="pd__ship-grid">
-                        <div className="pd__ship-card">
-                            <span className="pd__ship-icon">🇮🇳</span>
-                            <strong>Pan India Delivery</strong>
-                            <p>We deliver to all states and Union Territories across India.</p>
-                        </div>
-                        <div className="pd__ship-card">
-                            <span className="pd__ship-icon">📅</span>
-                            <strong>5–8 Business Days</strong>
-                            <p>Metro cities: 5–7 days · Other cities: 6–8 days · Remote: 7–10 days</p>
-                        </div>
-                        <div className="pd__ship-card">
-                            <span className="pd__ship-icon">💵</span>
-                            <strong>COD Available</strong>
-                            <p>Cash on Delivery available with a nominal shipping charge of ₹60.</p>
-                        </div>
-                        <div className="pd__ship-card">
-                            <span className="pd__ship-icon">🔄</span>
-                            <strong>Damage Replacement</strong>
-                            <p>Report damaged products within 24 hours of delivery with photo evidence.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             {/* ══════════════════════════════════════════════
                 SECTION 8 — FAQ (SHORT)

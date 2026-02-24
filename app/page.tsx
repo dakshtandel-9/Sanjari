@@ -2,21 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /* ─────────────────────────── DATA ─────────────────────────── */
 const INGREDIENTS = [
-  { name: "Bhringraj", desc: "Known to promote growth and reduce fall." },
-  { name: "Amla", desc: "Rich in Vitamin C, strengthens hair." },
-  { name: "Brahmi", desc: "Calms scalp and supports healthy follicles." },
-  { name: "Neem", desc: "Antibacterial properties for a clean scalp." },
+  { name: "Coconut Oil (70ml)", desc: "100% pure base oil that deeply conditions the scalp and provides essential fatty acids.", icon: "/KeyIngredients/1.png" },
+  { name: "Virgin Amla Oil (10ml)", desc: "Rich in Vitamin C; prevents premature greying and strengthens hair roots.", icon: "/KeyIngredients/2.png" },
+  { name: "Virgin Olive Oil (10ml)", desc: "Natural moisturiser that improves hair elasticity and reduces breakage.", icon: "/KeyIngredients/3.png" },
+  { name: "Bhringraj Oil (05ml)", desc: "The 'King of Herbs' that stimulates hair follicles and promotes dense growth.", icon: "/KeyIngredients/4.png" },
+  { name: "Brahmi Oil (05ml)", desc: "Calms the nerves and nourishes the scalp to reduce dandruff and itching.", icon: "/KeyIngredients/5.png" },
+  { name: "Aritha Extracts (2gm)", desc: "Natural cleanser that removes dirt and excess oil without stripping moisture.", icon: "/KeyIngredients/6.png" },
+  { name: "Alovera Extract (5gm)", desc: "Soothes the scalp and acts as a natural conditioner for silky, smooth hair.", icon: "/KeyIngredients/7.png" },
+];
+
+const BENEFITS = [
+  { icon: "/Benefits/1.png", title: "Hair Growth Support", desc: "Ayurvedic herbs like Bhringraj and Brahmi work at the root level to support natural hair growth cycles." },
+  { icon: "/Benefits/2.png", title: "Stronger Roots", desc: "Regular application nourishes follicles with essential nutrients, reducing weakness at the root." },
+  { icon: "/Benefits/3.png", title: "Reduced Hair Fall", desc: "Strengthens the hair shaft and improves root grip, helping reduce excessive daily hair loss." },
+  { icon: "/Benefits/4.png", title: "Scalp Nourishment", desc: "Natural oils penetrate deep to hydrate a dry, flaky scalp and maintain a healthy environment for hair." },
 ];
 
 const REVIEWS = [
-  { name: "Priya S.", city: "Mumbai", stars: 5, text: "Been using for 6 weeks and my hair fall has noticeably reduced. Smells natural and applies easily. Very happy with the product.", },
-  { name: "Ravi K.", city: "Bangalore", stars: 5, text: "My wife recommended this. Honestly didn't expect much but the scalp feels so much better after 3–4 uses. Will order again.", },
-  { name: "Anita M.", city: "Delhi", stars: 4, text: "Good herbal oil. Packaging was intact, delivery was on time. Takes time to show results but it's worth it for regular use.", },
-  { name: "Suresh P.", city: "Chennai", stars: 5, text: "Very good product. Natural smell, not heavy like other oils. My hair feels stronger. COD option made it easy to order.", },
+  { name: "Priya S.", city: "Mumbai", stars: 5, text: "Been using for 6 weeks and my hair fall has noticeably reduced. Smells natural and applies easily. Very happy with the product.", image: "https://i.pravatar.cc/150?u=priya" },
+  { name: "Ravi K.", city: "Bangalore", stars: 5, text: "My wife recommended this. Honestly didn't expect much but the scalp feels so much better after 3–4 uses. Will order again.", image: "https://i.pravatar.cc/150?u=ravi" },
+  { name: "Anita M.", city: "Delhi", stars: 4, text: "Good herbal oil. Packaging was intact, delivery was on time. Takes time to show results but it's worth it for regular use.", image: "https://i.pravatar.cc/150?u=anita" },
+  { name: "Suresh P.", city: "Chennai", stars: 5, text: "Very good product. Natural smell, not heavy like other oils. My hair feels stronger. COD option made it easy to order.", image: "https://i.pravatar.cc/150?u=suresh" },
+  { name: "Meera K.", city: "Hyderabad", stars: 5, text: "I was skeptical but this oil is actually quite good. My hair feels much softer and the frizz is under control.", image: "https://i.pravatar.cc/150?u=meera" },
+  { name: "Arjun V.", city: "Kochi", stars: 5, text: "Strong herbal scent which I personally love. It feels like real Ayurveda. Great for scalp health.", image: "https://i.pravatar.cc/150?u=arjun" },
+  { name: "Sunita R.", city: "Pune", stars: 5, text: "Best hair oil I've used so far. The packaging is premium and the product is even better. My hair fall has decreased significantly.", image: "https://i.pravatar.cc/150?u=sunita" },
+  { name: "Vikram S.", city: "Jaipur", stars: 4, text: "Decent product. Takes a bit of time to wash off because it's thick, but the results are good. Smells like herbs.", image: "https://i.pravatar.cc/150?u=vikram" },
+  { name: "Kavita B.", city: "Ahmedabad", stars: 5, text: "Value for money! You get a good quantity for the price, and the quality is top-notch. Seeing less hair on my brush now.", image: "https://i.pravatar.cc/150?u=kavita" },
 ];
 
 const FAQS_SHORT = [
@@ -42,6 +57,54 @@ function Stars({ count }: { count: number }) {
 /* ─────────────────────────── PAGE ─────────────────────────── */
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const ingredientsScrollRef = useRef<HTMLDivElement>(null);
+  const benefitsScrollRef = useRef<HTMLDivElement>(null);
+  const reviewsScrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scrolling logic helper
+  const setupAutoScroll = (ref: React.RefObject<HTMLDivElement>, speed: number) => {
+    const el = ref.current;
+    if (!el) return;
+
+    let animationId: number;
+    let isMouseOver = false;
+
+    const scroll = () => {
+      if (!isMouseOver) {
+        el.scrollLeft += speed;
+        if (el.scrollLeft >= el.scrollWidth / 2) {
+          el.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(scroll);
+    };
+
+    const handleMouseEnter = () => { isMouseOver = true; };
+    const handleMouseLeave = () => { isMouseOver = false; };
+
+    el.addEventListener("mouseenter", handleMouseEnter);
+    el.addEventListener("mouseleave", handleMouseLeave);
+    animationId = requestAnimationFrame(scroll);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      el.removeEventListener("mouseenter", handleMouseEnter);
+      el.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  };
+
+  useEffect(() => {
+    const cleanup1 = setupAutoScroll(ingredientsScrollRef, 0.8);
+    const cleanup2 = setupAutoScroll(benefitsScrollRef, 0.7);
+    const cleanup3 = setupAutoScroll(reviewsScrollRef, 0.6);
+
+    return () => {
+      cleanup1?.();
+      cleanup2?.();
+      cleanup3?.();
+    };
+  }, []);
 
   const buyNow = () => {
     localStorage.setItem("sanjari_qty", "1");
@@ -126,23 +189,16 @@ export default function Home() {
         <div className="hm__section-inner text-center">
           <h2 className="hm__sec-title">Why Choose Sanajri?</h2>
 
-          <div className="hm__benefit-grid">
-            <div className="hm__benefit-card">
-              <div className="hm__benefit-icon">🍃</div>
-              <h3 className="hm__benefit-title">Herbal Formula</h3>
-            </div>
-            <div className="hm__benefit-card">
-              <div className="hm__benefit-icon">🌱</div>
-              <h3 className="hm__benefit-title">Root Nourishment</h3>
-            </div>
-            <div className="hm__benefit-card">
-              <div className="hm__benefit-icon">🛡️</div>
-              <h3 className="hm__benefit-title">Reduces Breakage</h3>
-            </div>
-            <div className="hm__benefit-card">
-              <div className="hm__benefit-icon">👨‍👩‍👧</div>
-              <h3 className="hm__benefit-title">For Men & Women</h3>
-            </div>
+          <div className="hm__benefit-grid" ref={benefitsScrollRef}>
+            {[...BENEFITS, ...BENEFITS].map((b, i) => (
+              <div key={i} className="hm__benefit-card">
+                <div className="hm__benefit-icon-wrap">
+                  <Image src={b.icon} alt={b.title} width={64} height={64} className="hm__benefit-img" />
+                </div>
+                <h3 className="hm__benefit-title">{b.title}</h3>
+                <p className="hm__benefit-desc">{b.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -154,11 +210,16 @@ export default function Home() {
         <div className="hm__section-inner text-center">
           <h2 className="hm__sec-title">Key Ingredients</h2>
 
-          <div className="hm__ing-grid">
-            {INGREDIENTS.map((ing, i) => (
+          <div className="hm__ing-grid" ref={ingredientsScrollRef}>
+            {[...INGREDIENTS, ...INGREDIENTS].map((ing, i) => (
               <div key={i} className="hm__ing-card">
-                <strong className="hm__ing-name">{ing.name}</strong>
-                <p className="hm__ing-desc">{ing.desc}</p>
+                <div className="hm__ing-icon-wrap">
+                  <Image src={ing.icon} alt={ing.name} width={48} height={48} className="hm__ing-img" />
+                </div>
+                <div>
+                  <strong className="hm__ing-name">{ing.name}</strong>
+                  <p className="hm__ing-desc">{ing.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -174,19 +235,25 @@ export default function Home() {
 
           <div className="hm__steps-grid">
             <div className="hm__step-card">
-              <div className="hm__step-icon">🖐️</div>
+              <div className="hm__step-icon-wrap">
+                <Image src="/HowToUse/1.png" alt="Apply" width={64} height={64} className="hm__step-img" />
+              </div>
               <h3 className="hm__step-title">1. Apply</h3>
               <p className="hm__step-desc">Apply oil directly to the scalp and hair roots.</p>
             </div>
             <div className="hm__step-card">
-              <div className="hm__step-icon">💆</div>
+              <div className="hm__step-icon-wrap">
+                <Image src="/HowToUse/2.png" alt="Massage" width={64} height={64} className="hm__step-img" />
+              </div>
               <h3 className="hm__step-title">2. Massage</h3>
-              <p className="hm__step-desc">Massage gently in circular motions.</p>
+              <p className="hm__step-desc">Massage gently in circular motions for 3-5 mins.</p>
             </div>
             <div className="hm__step-card">
-              <div className="hm__step-icon">🚿</div>
+              <div className="hm__step-icon-wrap">
+                <Image src="/HowToUse/3.png" alt="Wash" width={64} height={64} className="hm__step-img" />
+              </div>
               <h3 className="hm__step-title">3. Wash</h3>
-              <p className="hm__step-desc">Leave for a few hours or overnight, then wash.</p>
+              <p className="hm__step-desc">Leave overnight, then wash with a mild shampoo.</p>
             </div>
           </div>
         </div>
@@ -199,11 +266,13 @@ export default function Home() {
         <div className="hm__section-inner">
           <h2 className="hm__sec-title text-center">Customer Reviews</h2>
 
-          <div className="hm__reviews-grid">
-            {REVIEWS.map((r, i) => (
+          <div className="hm__reviews-grid" ref={reviewsScrollRef}>
+            {[...REVIEWS, ...REVIEWS].map((r, i) => (
               <div key={i} className="hm__review-card">
                 <div className="hm__review-header">
-                  <div className="hm__review-avatar">{r.name[0]}</div>
+                  <div className="hm__review-avatar">
+                    <Image src={r.image} alt={r.name} fill className="hm__review-img" />
+                  </div>
                   <div>
                     <strong className="hm__review-name">{r.name}</strong>
                     <span className="hm__review-city">{r.city}</span>
@@ -211,6 +280,7 @@ export default function Home() {
                   <Stars count={r.stars} />
                 </div>
                 <p className="hm__review-text">"{r.text}"</p>
+                <span className="hm__review-verified">✔ Verified Purchase</span>
               </div>
             ))}
           </div>
@@ -495,41 +565,67 @@ export default function Home() {
 
                 /* ══ 3️⃣ PRODUCT BENEFITS ════════════════════ */
                 .hm__benefit-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 24px;
+                    display: flex;
+                    gap: 20px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    -webkit-overflow-scrolling: touch;
                 }
                 .hm__benefit-card {
+                    flex: 0 0 280px;
                     background: #fff;
-                    border: 1px solid #E0E0E0;
-                    border-radius: 16px;
-                    padding: 32px 20px;
+                    border: 1px solid #C8E6C9;
+                    border-radius: 18px;
+                    padding: 32px 24px;
                     text-align: center;
-                    transition: box-shadow 0.2s, transform 0.2s;
+                    transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .hm__benefit-card:hover { 
                     box-shadow: 0 10px 30px rgba(26, 92, 42, 0.08);
                     transform: translateY(-4px); 
-                    border-color: #C8E6C9;
                 }
-                .hm__benefit-icon { font-size: 2.5rem; margin-bottom: 16px; }
-                .hm__benefit-title { font-size: 1.1rem; font-weight: 800; color: #212121; margin: 0; }
+                .hm__benefit-icon-wrap { 
+                    width: 64px; 
+                    height: 64px; 
+                    margin: 0 auto 16px; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .hm__benefit-img { object-fit: contain; }
+                .hm__benefit-title { font-size: 1.1rem; font-weight: 800; color: #1a5c2a; margin: 0 0 8px; }
+                .hm__benefit-desc { font-size: 0.875rem; color: #666; line-height: 1.6; margin: 0; }
 
                 /* ══ 4️⃣ INGREDIENT HIGHLIGHT ════════════════ */
                 .hm__ing-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    display: flex;
                     gap: 20px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    -webkit-overflow-scrolling: touch;
                 }
                 .hm__ing-card {
+                    flex: 0 0 320px;
                     background: #fff;
                     border: 1px solid #C8E6C9;
                     border-radius: 16px;
                     padding: 24px;
+                    display: flex;
+                    gap: 16px;
+                    align-items: flex-start;
                     text-align: left;
                 }
-                .hm__ing-name { display: block; font-size: 1.1rem; font-weight: 800; color: #1a5c2a; margin-bottom: 8px; }
-                .hm__ing-desc { font-size: 0.9rem; color: #555; line-height: 1.5; margin: 0; }
+                .hm__ing-icon-wrap { 
+                    width: 48px; 
+                    height: 48px; 
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .hm__ing-img { object-fit: contain; mix-blend-mode: multiply; }
+                .hm__ing-name { display: block; font-size: 1.05rem; font-weight: 800; color: #1a5c2a; margin-bottom: 4px; }
+                .hm__ing-desc { font-size: 0.875rem; color: #666; line-height: 1.5; margin: 0; }
 
                 /* ══ 5️⃣ HOW TO USE ══════════════════════════ */
                 .hm__steps-grid {
@@ -542,18 +638,30 @@ export default function Home() {
                     border: 1px dashed #C8E6C9;
                     border-radius: 20px;
                     padding: 32px 24px;
+                    text-align: center;
                 }
-                .hm__step-icon { font-size: 2.5rem; margin-bottom: 16px; }
+                .hm__step-icon-wrap { 
+                    width: 64px; 
+                    height: 64px; 
+                    margin: 0 auto 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .hm__step-img { object-fit: contain; mix-blend-mode: multiply; }
                 .hm__step-title { font-size: 1.2rem; font-weight: 800; color: #1a5c2a; margin: 0 0 12px; }
                 .hm__step-desc { font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0; }
 
                 /* ══ 6️⃣ REVIEWS ═════════════════════════════ */
                 .hm__reviews-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                    gap: 20px;
+                    display: flex;
+                    gap: 18px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    -webkit-overflow-scrolling: touch;
                 }
                 .hm__review-card {
+                    flex: 0 0 320px;
                     background: #fff;
                     border: 1px solid #E0E0E0;
                     border-radius: 16px;
@@ -566,17 +674,36 @@ export default function Home() {
                 .hm__review-avatar {
                     width: 44px; height: 44px;
                     border-radius: 50%;
-                    background: #E8F5E9;
-                    color: #1a5c2a;
-                    font-size: 1.1rem;
-                    font-weight: 800;
-                    display: flex; align-items: center; justify-content: center;
+                    overflow: hidden;
+                    position: relative;
                     flex-shrink: 0;
+                    border: 1.5px solid #2d8a3e;
                 }
-                .hm__review-name { display: block; font-size: 1rem; font-weight: 700; color: #212121; }
-                .hm__review-city { display: block; font-size: 0.8rem; color: #888; }
-                .hm__review-text { font-size: 0.95rem; color: #444; line-height: 1.6; margin: 0; font-style: italic; }
+                .hm__review-img { object-fit: cover; }
+                .hm__review-name { display: block; font-size: 0.95rem; font-weight: 700; color: #212121; }
+                .hm__review-city { display: block; font-size: 0.75rem; color: #888; }
+                .hm__review-text { font-size: 0.9rem; color: #444; line-height: 1.6; margin: 0; font-style: italic; }
+                .hm__review-verified { font-size: 0.72rem; color: #2d8a3e; font-weight: 700; margin-top: auto; }
                 .hm__stars { font-size: 1.1rem; letter-spacing: 1px; }
+
+                /* Common Scrollbar Style */
+                .hm__ing-grid::-webkit-scrollbar,
+                .hm__benefit-grid::-webkit-scrollbar,
+                .hm__reviews-grid::-webkit-scrollbar {
+                    height: 6px;
+                }
+                .hm__ing-grid::-webkit-scrollbar-track,
+                .hm__benefit-grid::-webkit-scrollbar-track,
+                .hm__reviews-grid::-webkit-scrollbar-track {
+                    background: #E8F5E9;
+                    border-radius: 10px;
+                }
+                .hm__ing-grid::-webkit-scrollbar-thumb,
+                .hm__benefit-grid::-webkit-scrollbar-thumb,
+                .hm__reviews-grid::-webkit-scrollbar-thumb {
+                    background: #A5D6A7;
+                    border-radius: 10px;
+                }
 
                 /* ══ 7️⃣ DELIVERY & POLICY ═══════════════════ */
                 .hm__delivery-grid {

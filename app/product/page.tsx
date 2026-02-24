@@ -2,41 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /* ─────────────────────────── DATA ─────────────────────────── */
 const INGREDIENTS = [
-    { name: "Coconut Oil (70ml)", desc: "100% pure base oil that deeply conditions the scalp and provides essential fatty acids." },
-    { name: "Virgin Amla Oil (10ml)", desc: "Rich in Vitamin C; prevents premature greying and strengthens hair roots." },
-    { name: "Virgin Olive Oil (10ml)", desc: "Natural moisturiser that improves hair elasticity and reduces breakage." },
-    { name: "Bhringraj Oil (05ml)", desc: "The 'King of Herbs' that stimulates hair follicles and promotes dense growth." },
-    { name: "Brahmi Oil (05ml)", desc: "Calms the nerves and nourishes the scalp to reduce dandruff and itching." },
-    { name: "Aritha Extracts (2gm)", desc: "Natural cleanser that removes dirt and excess oil without stripping moisture." },
-    { name: "Alovera Extract (5gm)", desc: "Soothes the scalp and acts as a natural conditioner for silky, smooth hair." },
-    { name: "Gulabpatti (2gm)", desc: "Provides a natural fragrance and maintains the pH balance of the scalp." },
-    { name: "Jatamasi (2gm)", desc: "Promotes hair growth and imparts a natural shine to dull, lifeless hair." },
-    { name: "Gul Godhal (1gm)", desc: "Contains amino acids that stimulate blood circulation in the scalp." },
-    { name: "Gul Surkh (1gm)", desc: "Traditional cooling herb that reduces scalp heat and inflammation." },
-    { name: "Gul Gaozban (1gm)", desc: "Offers antimicrobial protection to keep the scalp healthy and infection-free." },
+    { name: "Coconut Oil (70ml)", desc: "100% pure base oil that deeply conditions the scalp and provides essential fatty acids.", icon: "/KeyIngredients/1.png" },
+    { name: "Virgin Amla Oil (10ml)", desc: "Rich in Vitamin C; prevents premature greying and strengthens hair roots.", icon: "/KeyIngredients/2.png" },
+    { name: "Virgin Olive Oil (10ml)", desc: "Natural moisturiser that improves hair elasticity and reduces breakage.", icon: "/KeyIngredients/3.png" },
+    { name: "Bhringraj Oil (05ml)", desc: "The 'King of Herbs' that stimulates hair follicles and promotes dense growth.", icon: "/KeyIngredients/4.png" },
+    { name: "Brahmi Oil (05ml)", desc: "Calms the nerves and nourishes the scalp to reduce dandruff and itching.", icon: "/KeyIngredients/5.png" },
+    { name: "Aritha Extracts (2gm)", desc: "Natural cleanser that removes dirt and excess oil without stripping moisture.", icon: "/KeyIngredients/6.png" },
+    { name: "Alovera Extract (5gm)", desc: "Soothes the scalp and acts as a natural conditioner for silky, smooth hair.", icon: "/KeyIngredients/7.png" },
 ];
 
 const BENEFITS = [
-    { icon: "🌱", title: "Hair Growth Support", desc: "Ayurvedic herbs like Bhringraj and Brahmi work at the root level to support natural hair growth cycles." },
-    { icon: "💪", title: "Stronger Roots", desc: "Regular application nourishes follicles with essential nutrients, reducing weakness at the root." },
-    { icon: "🛡️", title: "Reduced Hair Fall", desc: "Strengthens the hair shaft and improves root grip, helping reduce excessive daily hair loss." },
-    { icon: "🌿", title: "Scalp Nourishment", desc: "Natural oils penetrate deep to hydrate a dry, flaky scalp and maintain a healthy environment for hair." },
+    { icon: "/Benefits/1.png", title: "Hair Growth Support", desc: "Ayurvedic herbs like Bhringraj and Brahmi work at the root level to support natural hair growth cycles." },
+    { icon: "/Benefits/2.png", title: "Stronger Roots", desc: "Regular application nourishes follicles with essential nutrients, reducing weakness at the root." },
+    { icon: "/Benefits/3.png", title: "Reduced Hair Fall", desc: "Strengthens the hair shaft and improves root grip, helping reduce excessive daily hair loss." },
+    { icon: "/Benefits/4.png", title: "Scalp Nourishment", desc: "Natural oils penetrate deep to hydrate a dry, flaky scalp and maintain a healthy environment for hair." },
 ];
 
 const REVIEWS = [
-    { name: "Priya S.", city: "Mumbai", stars: 5, text: "Been using for 6 weeks and my hair fall has noticeably reduced. Smells natural and applies easily. Very happy with the product.", },
-    { name: "Ravi K.", city: "Bangalore", stars: 5, text: "My wife recommended this. Honestly didn't expect much but the scalp feels so much better after 3–4 uses. Will order again.", },
-    { name: "Anita M.", city: "Delhi", stars: 4, text: "Good herbal oil. Packaging was intact, delivery was on time. Takes time to show results but it's worth it for regular use.", },
-    { name: "Suresh P.", city: "Chennai", stars: 5, text: "Very good product. Natural smell, not heavy like other oils. My hair feels stronger. COD option made it easy to order.", },
-    { name: "Meera K.", city: "Hyderabad", stars: 5, text: "I was skeptical but this oil is actually quite good. My hair feels much softer and the frizz is under control.", },
-    { name: "Arjun V.", city: "Kochi", stars: 5, text: "Strong herbal scent which I personally love. It feels like real Ayurveda. Great for scalp health.", },
-    { name: "Sunita R.", city: "Pune", stars: 5, text: "Best hair oil I've used so far. The packaging is premium and the product is even better. My hair fall has decreased significantly.", },
-    { name: "Vikram S.", city: "Jaipur", stars: 4, text: "Decent product. Takes a bit of time to wash off because it's thick, but the results are good. Smells like herbs.", },
-    { name: "Kavita B.", city: "Ahmedabad", stars: 5, text: "Value for money! You get a good quantity for the price, and the quality is top-notch. Seeing less hair on my brush now.", },
+    { name: "Priya S.", city: "Mumbai", stars: 5, text: "Been using for 6 weeks and my hair fall has noticeably reduced. Smells natural and applies easily. Very happy with the product.", image: "https://i.pravatar.cc/150?u=priya" },
+    { name: "Ravi K.", city: "Bangalore", stars: 5, text: "My wife recommended this. Honestly didn't expect much but the scalp feels so much better after 3–4 uses. Will order again.", image: "https://i.pravatar.cc/150?u=ravi" },
+    { name: "Anita M.", city: "Delhi", stars: 4, text: "Good herbal oil. Packaging was intact, delivery was on time. Takes time to show results but it's worth it for regular use.", image: "https://i.pravatar.cc/150?u=anita" },
+    { name: "Suresh P.", city: "Chennai", stars: 5, text: "Very good product. Natural smell, not heavy like other oils. My hair feels stronger. COD option made it easy to order.", image: "https://i.pravatar.cc/150?u=suresh" },
+    { name: "Meera K.", city: "Hyderabad", stars: 5, text: "I was skeptical but this oil is actually quite good. My hair feels much softer and the frizz is under control.", image: "https://i.pravatar.cc/150?u=meera" },
+    { name: "Arjun V.", city: "Kochi", stars: 5, text: "Strong herbal scent which I personally love. It feels like real Ayurveda. Great for scalp health.", image: "https://i.pravatar.cc/150?u=arjun" },
+    { name: "Sunita R.", city: "Pune", stars: 5, text: "Best hair oil I've used so far. The packaging is premium and the product is even better. My hair fall has decreased significantly.", image: "https://i.pravatar.cc/150?u=sunita" },
+    { name: "Vikram S.", city: "Jaipur", stars: 4, text: "Decent product. Takes a bit of time to wash off because it's thick, but the results are good. Smells like herbs.", image: "https://i.pravatar.cc/150?u=vikram" },
+    { name: "Kavita B.", city: "Ahmedabad", stars: 5, text: "Value for money! You get a good quantity for the price, and the quality is top-notch. Seeing less hair on my brush now.", image: "https://i.pravatar.cc/150?u=kavita" },
 ];
 
 const FAQS_SHORT = [
@@ -60,25 +55,6 @@ function Stars({ count }: { count: number }) {
     );
 }
 
-function NaturalBadge() {
-    return (
-        <div className="natural-badge">
-            <svg viewBox="0 0 100 100" className="natural-badge__circle">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="210 280" />
-            </svg>
-            <div className="natural-badge__content">
-                <span className="natural-badge__percent">100%</span>
-                <span className="natural-badge__text">NATURAL</span>
-            </div>
-            <div className="natural-badge__leaves">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17,8C15.39,8.12 13.88,8.83 12.78,10C11.67,8.83 10.16,8.12 8.55,8C5.5,8 3,10.5 3,13.5C3,16.5 5.5,19 8.55,19C10.16,18.88 11.67,18.17 12.78,17C13.88,18.17 15.39,18.88 17,19C20.05,19 22.55,16.5 22.55,13.5C22.55,10.5 20.05,8 17,8M17,17C15.6,17 14.45,15.85 14.45,14.45C14.45,13.05 15.6,11.9 17,11.9C18.4,11.9 19.55,13.05 19.55,14.45C19.55,15.85 18.4,17 17,17M8.55,17C7.15,17 6,15.85 6,14.45C6,13.05 7.15,11.9 8.55,11.9C9.95,11.9 11.1,13.05 11.1,14.45C11.1,15.85 9.95,17 8.55,17Z" />
-                </svg>
-            </div>
-        </div>
-    );
-}
-
 /* ─────────────────────────── PAGE ─────────────────────────── */
 export default function ProductPage() {
     const [qty, setQty] = useState(1);
@@ -88,6 +64,9 @@ export default function ProductPage() {
     const [couponMsg, setCouponMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [activeImg, setActiveImg] = useState(0);
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const reviewsScrollRef = useRef<HTMLDivElement>(null);
+    const benefitsScrollRef = useRef<HTMLDivElement>(null);
 
     const total = Math.max(0, ITEM_PRICE * qty - discount);
 
@@ -148,6 +127,102 @@ export default function ProductPage() {
             setActiveImg((prev) => (prev + 1) % THUMBNAILS.length);
         }, 3000);
         return () => clearInterval(interval);
+    }, []);
+
+    // Auto-scroll ingredients
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        let animationId: number;
+        let isMouseOver = false;
+
+        const scroll = () => {
+            if (!isMouseOver) {
+                el.scrollLeft += 0.8; // Smooth slow scroll
+                if (el.scrollLeft >= el.scrollWidth / 2) {
+                    el.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scroll);
+        };
+
+        const handleMouseEnter = () => { isMouseOver = true; };
+        const handleMouseLeave = () => { isMouseOver = false; };
+
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+
+        animationId = requestAnimationFrame(scroll);
+        return () => {
+            cancelAnimationFrame(animationId);
+            el.removeEventListener("mouseenter", handleMouseEnter);
+            el.removeEventListener("mouseleave", handleMouseLeave);
+        };
+    }, []);
+
+    // Auto-scroll reviews
+    useEffect(() => {
+        const el = reviewsScrollRef.current;
+        if (!el) return;
+
+        let animationId: number;
+        let isMouseOver = false;
+
+        const scroll = () => {
+            if (!isMouseOver) {
+                el.scrollLeft += 0.6; // Slightly slower for readability
+                if (el.scrollLeft >= el.scrollWidth / 2) {
+                    el.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scroll);
+        };
+
+        const handleMouseEnter = () => { isMouseOver = true; };
+        const handleMouseLeave = () => { isMouseOver = false; };
+
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+
+        animationId = requestAnimationFrame(scroll);
+        return () => {
+            cancelAnimationFrame(animationId);
+            el.removeEventListener("mouseenter", handleMouseEnter);
+            el.removeEventListener("mouseleave", handleMouseLeave);
+        };
+    }, []);
+
+    // Auto-scroll benefits
+    useEffect(() => {
+        const el = benefitsScrollRef.current;
+        if (!el) return;
+
+        let animationId: number;
+        let isMouseOver = false;
+
+        const scroll = () => {
+            if (!isMouseOver) {
+                el.scrollLeft += 0.7; // Moderate speed
+                if (el.scrollLeft >= el.scrollWidth / 2) {
+                    el.scrollLeft = 0;
+                }
+            }
+            animationId = requestAnimationFrame(scroll);
+        };
+
+        const handleMouseEnter = () => { isMouseOver = true; };
+        const handleMouseLeave = () => { isMouseOver = false; };
+
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+
+        animationId = requestAnimationFrame(scroll);
+        return () => {
+            cancelAnimationFrame(animationId);
+            el.removeEventListener("mouseenter", handleMouseEnter);
+            el.removeEventListener("mouseleave", handleMouseLeave);
+        };
     }, []);
 
     return (
@@ -306,10 +381,18 @@ export default function ProductPage() {
                 <div className="pd__section-inner">
                     <span className="pd__sec-badge">Formulation</span>
                     <h2 className="pd__sec-title">Key Ingredients</h2>
-                    <div className="pd__ing-grid">
-                        {INGREDIENTS.map((ing, i) => (
+                    <div className="pd__ing-grid" ref={scrollRef}>
+                        {[...INGREDIENTS, ...INGREDIENTS].map((ing, i) => (
                             <div key={i} className="pd__ing-card">
-                                <div className="pd__ing-icon">🌿</div>
+                                <div className="pd__ing-icon-wrap">
+                                    <Image
+                                        src={ing.icon}
+                                        alt={ing.name}
+                                        width={48}
+                                        height={48}
+                                        className="pd__ing-img"
+                                    />
+                                </div>
                                 <div>
                                     <strong className="pd__ing-name">{ing.name}</strong>
                                     <p className="pd__ing-desc">{ing.desc}</p>
@@ -330,7 +413,9 @@ export default function ProductPage() {
                     <div className="pd__steps">
                         <div className="pd__step">
                             <div className="pd__step-num">01</div>
-                            <div className="pd__step-icon">🖐️</div>
+                            <div className="pd__step-icon-wrap">
+                                <Image src="/HowToUse/1.png" alt="Apply" width={44} height={44} className="pd__step-img" />
+                            </div>
                             <div className="pd__step-body">
                                 <strong>Apply to Scalp</strong>
                                 <p>Take a small amount of oil and apply directly to the scalp and hair roots.</p>
@@ -339,7 +424,9 @@ export default function ProductPage() {
                         <div className="pd__step-connector" aria-hidden="true" />
                         <div className="pd__step">
                             <div className="pd__step-num">02</div>
-                            <div className="pd__step-icon">💆</div>
+                            <div className="pd__step-icon-wrap">
+                                <Image src="/HowToUse/2.png" alt="Massage" width={44} height={44} className="pd__step-img" />
+                            </div>
                             <div className="pd__step-body">
                                 <strong>Massage Gently</strong>
                                 <p>Massage in circular motions for 3–5 minutes to improve absorption and circulation.</p>
@@ -348,7 +435,9 @@ export default function ProductPage() {
                         <div className="pd__step-connector" aria-hidden="true" />
                         <div className="pd__step">
                             <div className="pd__step-num">03</div>
-                            <div className="pd__step-icon">🌙</div>
+                            <div className="pd__step-icon-wrap">
+                                <Image src="/HowToUse/3.png" alt="Wash" width={44} height={44} className="pd__step-img" />
+                            </div>
                             <div className="pd__step-body">
                                 <strong>Leave & Wash</strong>
                                 <p>Leave for a few hours or overnight, then wash with a mild shampoo. Best used 2–3 times a week.</p>
@@ -363,19 +452,20 @@ export default function ProductPage() {
             ══════════════════════════════════════════════ */}
             <section className="pd__section pd__section--green" id="benefits">
                 <div className="pd__section-inner">
-                    <div className="pd__benefit-header">
-                        <div className="pd__benefit-badge-wrap">
-                            <NaturalBadge />
-                        </div>
-                        <div className="pd__benefit-title-wrap">
-                            <span className="pd__sec-badge">Pure Ayurveda</span>
-                            <h2 className="pd__sec-title">Benefits Explained</h2>
-                        </div>
-                    </div>
-                    <div className="pd__benefit-grid">
-                        {BENEFITS.map((b, i) => (
+                    <span className="pd__sec-badge">Why Sanjari</span>
+                    <h2 className="pd__sec-title">Benefits Explained</h2>
+                    <div className="pd__benefit-grid" ref={benefitsScrollRef}>
+                        {[...BENEFITS, ...BENEFITS].map((b, i) => (
                             <div key={i} className="pd__benefit-card">
-                                <div className="pd__benefit-icon">{b.icon}</div>
+                                <div className="pd__benefit-icon-wrap">
+                                    <Image
+                                        src={b.icon}
+                                        alt={b.title}
+                                        width={48}
+                                        height={48}
+                                        className="pd__benefit-img"
+                                    />
+                                </div>
                                 <h3 className="pd__benefit-title">{b.title}</h3>
                                 <p className="pd__benefit-desc">{b.desc}</p>
                             </div>
@@ -398,12 +488,19 @@ export default function ProductPage() {
                             <p className="pd__reviews-count">Based on 142 verified purchases</p>
                         </div>
                     </div>
-                    <div className="pd__reviews-grid">
-                        {REVIEWS.map((r, i) => (
+                    <div className="pd__reviews-grid" ref={reviewsScrollRef}>
+                        {[...REVIEWS, ...REVIEWS].map((r, i) => (
                             <div key={i} className="pd__review-card">
                                 <div className="pd__review-header">
-                                    <div className="pd__review-avatar">{r.name[0]}</div>
-                                    <div>
+                                    <div className="pd__review-avatar">
+                                        <Image
+                                            src={r.image}
+                                            alt={r.name}
+                                            fill
+                                            className="pd__review-img"
+                                        />
+                                    </div>
+                                    <div className="pd__review-user-info">
                                         <strong className="pd__review-name">{r.name}</strong>
                                         <span className="pd__review-city">{r.city}</span>
                                     </div>
@@ -483,69 +580,6 @@ export default function ProductPage() {
                 .pd__section--green { background: #E8F5E9; }
                 .pd__section-inner { max-width: 1080px; margin: 0 auto; }
                 .pd__section-inner--narrow { max-width: 760px; }
-
-                /* Natural Badge */
-                .natural-badge {
-                    position: relative;
-                    width: 100px;
-                    height: 100px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #1a5c2a;
-                }
-                .natural-badge__circle {
-                    position: absolute;
-                    top: 0; left: 0;
-                    width: 100%; height: 100%;
-                    transform: rotate(-90deg);
-                }
-                .natural-badge__content {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    line-height: 1;
-                    z-index: 2;
-                }
-                .natural-badge__percent {
-                    font-size: 1.4rem;
-                    font-weight: 900;
-                }
-                .natural-badge__text {
-                    font-size: 0.6rem;
-                    font-weight: 800;
-                    letter-spacing: 0.1em;
-                }
-                .natural-badge__leaves {
-                    position: absolute;
-                    top: 10px;
-                    right: -5px;
-                    width: 35px;
-                    height: 35px;
-                    z-index: 3;
-                    transform: rotate(15deg);
-                }
-
-                .pd__benefit-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 32px;
-                    margin-bottom: 40px;
-                }
-                @media (max-width: 600px) {
-                    .pd__benefit-header {
-                        flex-direction: column;
-                        text-align: center;
-                    }
-                }
-                .pd__benefit-title-wrap {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .pd__benefit-title-wrap .pd__sec-badge { margin-bottom: 8px; align-self: flex-start; }
-                @media (max-width: 600px) {
-                    .pd__benefit-title-wrap .pd__sec-badge { align-self: center; }
-                }
 
                 /* Section badge + title */
                 .pd__sec-badge {
@@ -852,7 +886,6 @@ export default function ProductPage() {
                     gap: 20px;
                     overflow-x: auto;
                     padding: 8px 4px 24px;
-                    scroll-snap-type: x mandatory;
                     -webkit-overflow-scrolling: touch;
                 }
                 .pd__ing-grid::-webkit-scrollbar {
@@ -868,7 +901,6 @@ export default function ProductPage() {
                 }
                 .pd__ing-card {
                     flex: 0 0 320px;
-                    scroll-snap-align: start;
                     display: flex;
                     gap: 14px;
                     align-items: flex-start;
@@ -883,7 +915,15 @@ export default function ProductPage() {
                     .pd__ing-card { flex: 0 0 280px; }
                 }
                 .pd__ing-card:hover { box-shadow: 0 4px 14px rgba(26, 92, 42, 0.1); }
-                .pd__ing-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+                .pd__ing-icon-wrap { 
+                    width: 48px; 
+                    height: 48px; 
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .pd__ing-img { object-fit: contain; mix-blend-mode: multiply; }
                 .pd__ing-name { display: block; font-size: 0.95rem; font-weight: 700; color: #1a5c2a; margin-bottom: 4px; }
                 .pd__ing-desc { font-size: 0.85rem; color: #666; line-height: 1.5; margin: 0; }
 
@@ -916,17 +956,39 @@ export default function ProductPage() {
                     display: flex; align-items: center; justify-content: center;
                     flex-shrink: 0;
                 }
-                .pd__step-icon { font-size: 1.8rem; flex-shrink: 0; }
+                .pd__step-icon-wrap { 
+                    width: 48px; 
+                    height: 48px; 
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .pd__step-img { object-fit: contain; mix-blend-mode: multiply; }
                 .pd__step-body strong { display: block; font-size: 1rem; font-weight: 700; color: #1a5c2a; margin-bottom: 4px; }
                 .pd__step-body p { font-size: 0.875rem; color: #555; line-height: 1.6; margin: 0; }
 
                 /* ══ SECTION 5 ══════════════════════════════ */
                 .pd__benefit-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                    display: flex;
                     gap: 20px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .pd__benefit-grid::-webkit-scrollbar {
+                    height: 6px;
+                }
+                .pd__benefit-grid::-webkit-scrollbar-track {
+                    background: #E8F5E9;
+                    border-radius: 10px;
+                }
+                .pd__benefit-grid::-webkit-scrollbar-thumb {
+                    background: #A5D6A7;
+                    border-radius: 10px;
                 }
                 .pd__benefit-card {
+                    flex: 0 0 260px;
                     background: #fff;
                     border: 1px solid #C8E6C9;
                     border-radius: 18px;
@@ -938,7 +1000,15 @@ export default function ProductPage() {
                     transform: translateY(-4px);
                     box-shadow: 0 8px 24px rgba(26, 92, 42, 0.12);
                 }
-                .pd__benefit-icon  { font-size: 2rem; margin-bottom: 12px; display: block; }
+                .pd__benefit-icon-wrap { 
+                    width: 64px; 
+                    height: 64px; 
+                    margin: 0 auto 16px; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .pd__benefit-img { object-fit: contain; }
                 .pd__benefit-title { font-size: 1rem; font-weight: 800; color: #1a5c2a; margin: 0 0 8px; }
                 .pd__benefit-desc  { font-size: 0.85rem; color: #666; line-height: 1.6; margin: 0; }
 
@@ -963,11 +1033,25 @@ export default function ProductPage() {
                 }
                 .pd__reviews-count { font-size: 0.8rem; color: #666; margin: 4px 0 0; }
                 .pd__reviews-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                    display: flex;
                     gap: 18px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .pd__reviews-grid::-webkit-scrollbar {
+                    height: 6px;
+                }
+                .pd__reviews-grid::-webkit-scrollbar-track {
+                    background: #E8F5E9;
+                    border-radius: 10px;
+                }
+                .pd__reviews-grid::-webkit-scrollbar-thumb {
+                    background: #A5D6A7;
+                    border-radius: 10px;
                 }
                 .pd__review-card {
+                    flex: 0 0 320px;
                     background: #fff;
                     border: 1px solid #C8E6C9;
                     border-radius: 16px;
@@ -985,13 +1069,13 @@ export default function ProductPage() {
                 .pd__review-avatar {
                     width: 38px; height: 38px;
                     border-radius: 50%;
-                    background: linear-gradient(135deg, #2d8a3e, #388E3C);
-                    color: #fff;
-                    font-size: 1rem;
-                    font-weight: 800;
-                    display: flex; align-items: center; justify-content: center;
+                    overflow: hidden;
+                    position: relative;
                     flex-shrink: 0;
+                    border: 1.5px solid #2d8a3e;
                 }
+                .pd__review-img { object-fit: cover; }
+                .pd__review-user-info { flex: 1; }
                 .pd__review-name { display: block; font-size: 0.9rem; font-weight: 700; color: #212121; }
                 .pd__review-city { display: block; font-size: 0.75rem; color: #888; }
                 .pd__review-text { font-size: 0.875rem; color: #444; line-height: 1.65; margin: 0; font-style: italic; }

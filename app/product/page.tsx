@@ -6,12 +6,18 @@ import { useState, useEffect } from "react";
 
 /* ─────────────────────────── DATA ─────────────────────────── */
 const INGREDIENTS = [
-    { name: "Bhringraj", desc: "King of herbs for hair — known to promote growth and reduce fall." },
-    { name: "Amla (Indian Gooseberry)", desc: "Rich in Vitamin C, nourishes the scalp and strengthens hair." },
-    { name: "Brahmi", desc: "Calms the scalp, reduces dandruff and supports healthy follicles." },
-    { name: "Neem Oil", desc: "Antibacterial properties that keep the scalp clean and healthy." },
-    { name: "Coconut Oil", desc: "Deep moisturiser that reduces protein loss in hair strands." },
-    { name: "Sesame Oil", desc: "Rich in minerals, conditions the scalp and prevents dryness." },
+    { name: "Coconut Oil (70ml)", desc: "100% pure base oil that deeply conditions the scalp and provides essential fatty acids." },
+    { name: "Virgin Amla Oil (10ml)", desc: "Rich in Vitamin C; prevents premature greying and strengthens hair roots." },
+    { name: "Virgin Olive Oil (10ml)", desc: "Natural moisturiser that improves hair elasticity and reduces breakage." },
+    { name: "Bhringraj Oil (05ml)", desc: "The 'King of Herbs' that stimulates hair follicles and promotes dense growth." },
+    { name: "Brahmi Oil (05ml)", desc: "Calms the nerves and nourishes the scalp to reduce dandruff and itching." },
+    { name: "Aritha Extracts (2gm)", desc: "Natural cleanser that removes dirt and excess oil without stripping moisture." },
+    { name: "Alovera Extract (5gm)", desc: "Soothes the scalp and acts as a natural conditioner for silky, smooth hair." },
+    { name: "Gulabpatti (2gm)", desc: "Provides a natural fragrance and maintains the pH balance of the scalp." },
+    { name: "Jatamasi (2gm)", desc: "Promotes hair growth and imparts a natural shine to dull, lifeless hair." },
+    { name: "Gul Godhal (1gm)", desc: "Contains amino acids that stimulate blood circulation in the scalp." },
+    { name: "Gul Surkh (1gm)", desc: "Traditional cooling herb that reduces scalp heat and inflammation." },
+    { name: "Gul Gaozban (1gm)", desc: "Offers antimicrobial protection to keep the scalp healthy and infection-free." },
 ];
 
 const BENEFITS = [

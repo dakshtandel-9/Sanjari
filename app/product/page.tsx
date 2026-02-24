@@ -543,10 +543,10 @@ export default function ProductPage() {
                     border-radius: 20px;
                     border: 1px solid #A5D6A7;
                 }
-                .pd__thumbs { display: flex; gap: 10px; }
+                .pd__thumbs { display: flex; gap: 10px; justify-content: space-between; }
                 .pd__thumb {
                     position: relative;
-                    width: 72px;
+                    width: calc((100% - 40px) / 5);
                     aspect-ratio: 1/1;
                     flex-shrink: 0;
                     border-radius: 12px;

@@ -525,7 +525,7 @@ export default function ProductPage() {
                 .pd__gallery { display: flex; flex-direction: column; gap: 14px; }
                 .pd__main-img-wrap {
                     position: relative;
-                    aspect-ratio: 4/5;
+                    aspect-ratio: 1/1;
                     border-radius: 24px;
                     overflow: hidden;
                     border: 1px solid #C8E6C9;
@@ -546,7 +546,8 @@ export default function ProductPage() {
                 .pd__thumbs { display: flex; gap: 10px; }
                 .pd__thumb {
                     position: relative;
-                    width: 80px; height: 80px;
+                    width: 72px;
+                    aspect-ratio: 1/1;
                     flex-shrink: 0;
                     border-radius: 12px;
                     overflow: hidden;

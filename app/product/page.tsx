@@ -60,6 +60,25 @@ function Stars({ count }: { count: number }) {
     );
 }
 
+function NaturalBadge() {
+    return (
+        <div className="natural-badge">
+            <svg viewBox="0 0 100 100" className="natural-badge__circle">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="210 280" />
+            </svg>
+            <div className="natural-badge__content">
+                <span className="natural-badge__percent">100%</span>
+                <span className="natural-badge__text">NATURAL</span>
+            </div>
+            <div className="natural-badge__leaves">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17,8C15.39,8.12 13.88,8.83 12.78,10C11.67,8.83 10.16,8.12 8.55,8C5.5,8 3,10.5 3,13.5C3,16.5 5.5,19 8.55,19C10.16,18.88 11.67,18.17 12.78,17C13.88,18.17 15.39,18.88 17,19C20.05,19 22.55,16.5 22.55,13.5C22.55,10.5 20.05,8 17,8M17,17C15.6,17 14.45,15.85 14.45,14.45C14.45,13.05 15.6,11.9 17,11.9C18.4,11.9 19.55,13.05 19.55,14.45C19.55,15.85 18.4,17 17,17M8.55,17C7.15,17 6,15.85 6,14.45C6,13.05 7.15,11.9 8.55,11.9C9.95,11.9 11.1,13.05 11.1,14.45C11.1,15.85 9.95,17 8.55,17Z" />
+                </svg>
+            </div>
+        </div>
+    );
+}
+
 /* ─────────────────────────── PAGE ─────────────────────────── */
 export default function ProductPage() {
     const [qty, setQty] = useState(1);
@@ -344,8 +363,15 @@ export default function ProductPage() {
             ══════════════════════════════════════════════ */}
             <section className="pd__section pd__section--green" id="benefits">
                 <div className="pd__section-inner">
-                    <span className="pd__sec-badge">Why Sanjari</span>
-                    <h2 className="pd__sec-title">Benefits Explained</h2>
+                    <div className="pd__benefit-header">
+                        <div className="pd__benefit-badge-wrap">
+                            <NaturalBadge />
+                        </div>
+                        <div className="pd__benefit-title-wrap">
+                            <span className="pd__sec-badge">Pure Ayurveda</span>
+                            <h2 className="pd__sec-title">Benefits Explained</h2>
+                        </div>
+                    </div>
                     <div className="pd__benefit-grid">
                         {BENEFITS.map((b, i) => (
                             <div key={i} className="pd__benefit-card">
@@ -457,6 +483,69 @@ export default function ProductPage() {
                 .pd__section--green { background: #E8F5E9; }
                 .pd__section-inner { max-width: 1080px; margin: 0 auto; }
                 .pd__section-inner--narrow { max-width: 760px; }
+
+                /* Natural Badge */
+                .natural-badge {
+                    position: relative;
+                    width: 100px;
+                    height: 100px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #1a5c2a;
+                }
+                .natural-badge__circle {
+                    position: absolute;
+                    top: 0; left: 0;
+                    width: 100%; height: 100%;
+                    transform: rotate(-90deg);
+                }
+                .natural-badge__content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    line-height: 1;
+                    z-index: 2;
+                }
+                .natural-badge__percent {
+                    font-size: 1.4rem;
+                    font-weight: 900;
+                }
+                .natural-badge__text {
+                    font-size: 0.6rem;
+                    font-weight: 800;
+                    letter-spacing: 0.1em;
+                }
+                .natural-badge__leaves {
+                    position: absolute;
+                    top: 10px;
+                    right: -5px;
+                    width: 35px;
+                    height: 35px;
+                    z-index: 3;
+                    transform: rotate(15deg);
+                }
+
+                .pd__benefit-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 32px;
+                    margin-bottom: 40px;
+                }
+                @media (max-width: 600px) {
+                    .pd__benefit-header {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                }
+                .pd__benefit-title-wrap {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .pd__benefit-title-wrap .pd__sec-badge { margin-bottom: 8px; align-self: flex-start; }
+                @media (max-width: 600px) {
+                    .pd__benefit-title-wrap .pd__sec-badge { align-self: center; }
+                }
 
                 /* Section badge + title */
                 .pd__sec-badge {

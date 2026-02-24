@@ -105,11 +105,11 @@ export default function ProductPage() {
     };
 
     const THUMBNAILS = [
-        "/productImages/1.svg",
-        "/productImages/2.svg",
-        "/productImages/3.svg",
-        "/productImages/4.svg",
-        "/productImages/5.svg"
+        "/productImages/1.png",
+        "/productImages/2.png",
+        "/productImages/3.png",
+        "/productImages/4.png",
+        "/productImages/5.png"
     ];
 
     // Auto-cycle banner image every 3 seconds

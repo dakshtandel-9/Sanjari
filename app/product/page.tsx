@@ -759,19 +759,39 @@ export default function ProductPage() {
 
                 /* ══ SECTION 3 ══════════════════════════════ */
                 .pd__ing-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                    gap: 16px;
+                    display: flex;
+                    gap: 20px;
+                    overflow-x: auto;
+                    padding: 8px 4px 24px;
+                    scroll-snap-type: x mandatory;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .pd__ing-grid::-webkit-scrollbar {
+                    height: 6px;
+                }
+                .pd__ing-grid::-webkit-scrollbar-track {
+                    background: #E8F5E9;
+                    border-radius: 10px;
+                }
+                .pd__ing-grid::-webkit-scrollbar-thumb {
+                    background: #A5D6A7;
+                    border-radius: 10px;
                 }
                 .pd__ing-card {
+                    flex: 0 0 320px;
+                    scroll-snap-align: start;
                     display: flex;
                     gap: 14px;
                     align-items: flex-start;
                     background: #fff;
                     border: 1px solid #C8E6C9;
                     border-radius: 16px;
-                    padding: 18px;
-                    transition: box-shadow 0.2s;
+                    padding: 22px;
+                    transition: all 0.2s;
+                    box-shadow: 0 4px 12px rgba(26, 92, 42, 0.04);
+                }
+                @media (max-width: 480px) {
+                    .pd__ing-card { flex: 0 0 280px; }
                 }
                 .pd__ing-card:hover { box-shadow: 0 4px 14px rgba(26, 92, 42, 0.1); }
                 .pd__ing-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }

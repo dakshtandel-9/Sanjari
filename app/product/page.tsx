@@ -1044,7 +1044,7 @@ export default function ProductPage() {
                     align-items: center;
                     justify-content: center;
                 }
-                .pd__ing-img { object-fit: contain; mix-blend-mode: multiply; }
+                .pd__ing-img { object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.08) contrast(1.08); }
                 .pd__ing-name { display: block; font-size: 0.95rem; font-weight: 700; color: #1a5c2a; margin-bottom: 4px; }
                 .pd__ing-desc { font-size: 0.85rem; color: #666; line-height: 1.5; margin: 0; }
 
@@ -1085,7 +1085,7 @@ export default function ProductPage() {
                     align-items: center;
                     justify-content: center;
                 }
-                .pd__step-img { object-fit: contain; mix-blend-mode: multiply; }
+                .pd__step-img { object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.1) contrast(1.1); }
                 .pd__step-body strong { display: block; font-size: 1rem; font-weight: 700; color: #1a5c2a; margin-bottom: 4px; }
                 .pd__step-body p { font-size: 0.875rem; color: #555; line-height: 1.6; margin: 0; }
 
@@ -1129,7 +1129,7 @@ export default function ProductPage() {
                     align-items: center;
                     justify-content: center;
                 }
-                .pd__benefit-img { object-fit: contain; mix-blend-mode: multiply; }
+                .pd__benefit-img { object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.08) contrast(1.08); }
                 .pd__benefit-title { font-size: 1rem; font-weight: 800; color: #1a5c2a; margin: 0 0 8px; }
                 .pd__benefit-desc  { font-size: 0.85rem; color: #666; line-height: 1.6; margin: 0; }
 

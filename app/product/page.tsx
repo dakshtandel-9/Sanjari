@@ -333,25 +333,33 @@ export default function ProductPage() {
 
                         {/* Trust line */}
                         <div className="pd__trust-line">
-                            <span>🔒 Secure Payment via Razorpay</span>
+                            <div className="pd__trust-item-sm">
+                                <Image src="/homePageIcon/4.png" alt="Secure" width={16} height={16} className="pd__trust-icon-sm" />
+                                <span>Secure Payment via Razorpay</span>
+                            </div>
                             <span className="pd__trust-sep">·</span>
-                            <span>🚚 COD Available</span>
+                            <div className="pd__trust-item-sm">
+                                <Image src="/homePageIcon/3.png" alt="COD" width={16} height={16} className="pd__trust-icon-sm" />
+                                <span>COD Available</span>
+                            </div>
                             <span className="pd__trust-sep">·</span>
-                            <span>🇮🇳 Made in India</span>
+                            <div className="pd__trust-item-sm">
+                                <Image src="/homePageIcon/shipping_india.png" alt="India" width={16} height={16} className="pd__trust-icon-sm" />
+                                <span>Made in India</span>
+                            </div>
                         </div>
 
                         {/* COD badge */}
                         <div className="pd__cod-badge">
-                            <span>💵</span>
+                            <div className="pd__cod-icon-wrap">
+                                <Image src="/homePageIcon/3.png" alt="COD Icon" width={20} height={20} className="pd__cod-icon-img" />
+                            </div>
                             <span>Cash on Delivery available · We'll call to confirm your order</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* ══════════════════════════════════════════════
-                SECTION 2 — ABOUT
-            ══════════════════════════════════════════════ */}
             <section className="pd__section pd__section--white" id="about">
                 <div className="pd__section-inner pd__section-inner--narrow">
                     <span className="pd__sec-badge">About the Product</span>
@@ -370,6 +378,62 @@ export default function ProductPage() {
                         <span className="pd__pill">✅ No Parabens</span>
                         <span className="pd__pill">🇮🇳 Made in India</span>
                         <span className="pd__pill">👨‍👩‍👧 Men & Women</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* ══════════════════════════════════════════════
+                SECTION 2.5 — BEFORE & AFTER
+            ══════════════════════════════════════════════ */}
+            <section className="pd__section" id="results" style={{ background: '#f9f9f9' }}>
+                <div className="pd__section-inner">
+                    <span className="pd__sec-badge">Real Results</span>
+                    <h2 className="pd__sec-title">Visible Transformation</h2>
+                    <div className="pd__before-after-container">
+                        <div className="pd__comparison-card">
+                            <div className="pd__comparison-label pd__comparison-label--before">Before</div>
+                            <div className="pd__comparison-img-wrap">
+                                <Image
+                                    src="/BeforeAfterImage/before.png"
+                                    alt="Before using Sanjari"
+                                    fill
+                                    className="pd__comparison-img"
+                                />
+                            </div>
+                        </div>
+                        <div className="pd__comparison-card">
+                            <div className="pd__comparison-label pd__comparison-label--after">After</div>
+                            <div className="pd__comparison-img-wrap">
+                                <Image
+                                    src="/BeforeAfterImage/after.png"
+                                    alt="After using Sanjari"
+                                    fill
+                                    className="pd__comparison-img"
+                                />
+                            </div>
+                        </div>
+                        <div className="pd__comparison-card">
+                            <div className="pd__comparison-label pd__comparison-label--before">Before</div>
+                            <div className="pd__comparison-img-wrap">
+                                <Image
+                                    src="/BeforeAfterImage/Before1.png"
+                                    alt="Before using Sanjari"
+                                    fill
+                                    className="pd__comparison-img"
+                                />
+                            </div>
+                        </div>
+                        <div className="pd__comparison-card">
+                            <div className="pd__comparison-label pd__comparison-label--after">After</div>
+                            <div className="pd__comparison-img-wrap">
+                                <Image
+                                    src="/BeforeAfterImage/After2.png"
+                                    alt="After using Sanjari"
+                                    fill
+                                    className="pd__comparison-img"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -831,27 +895,44 @@ export default function ProductPage() {
                 .pd__trust-line {
                     display: flex;
                     align-items: center;
-                    justify-content: center;
+                    gap: 12px;
                     flex-wrap: wrap;
-                    gap: 8px;
-                    font-size: 0.78rem;
-                    color: #666;
-                    text-align: center;
+                    padding-top: 20px;
+                    margin-top: 20px;
+                    border-top: 1px solid #eee;
                 }
-                .pd__trust-sep { color: #C8E6C9; }
+                .pd__trust-item-sm {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.82rem;
+                    color: #666;
+                }
+                .pd__trust-icon-sm { object-fit: contain; mix-blend-mode: multiply; }
+                .pd__trust-sep { color: #ddd; font-weight: 300; }
 
-                /* COD badge */
                 .pd__cod-badge {
+                    margin-top: 16px;
                     display: flex;
                     align-items: center;
                     gap: 10px;
-                    background: #E8F5E9;
-                    border: 1px solid #A5D6A7;
+                    padding: 12px 16px;
+                    background: #f7faf7;
+                    border: 1px dashed #A5D6A7;
                     border-radius: 12px;
-                    padding: 12px 14px;
                     font-size: 0.85rem;
-                    font-weight: 600;
                     color: #2d5a2d;
+                    font-weight: 600;
+                }
+                .pd__cod-icon-wrap {
+                    width: 20px;
+                    height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+                .pd__cod-icon-img { object-fit: contain; mix-blend-mode: multiply; }
                 }
 
                 /* ══ SECTION 2 ══════════════════════════════ */
@@ -880,6 +961,46 @@ export default function ProductPage() {
                     color: #1a5c2a;
                 }
 
+                /* ══ SECTION 2.5 — BEFORE & AFTER ═══════════ */
+                .pd__before-after-container {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                }
+                @media (max-width: 900px) {
+                    .pd__before-after-container { grid-template-columns: 1fr 1fr; }
+                }
+                @media (max-width: 500px) {
+                    .pd__before-after-container { grid-template-columns: 1fr; }
+                }
+                .pd__comparison-card {
+                    position: relative;
+                    border-radius: 20px;
+                    overflow: hidden;
+                    border: 1px solid #C8E6C9;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                }
+                .pd__comparison-img-wrap {
+                    position: relative;
+                    aspect-ratio: 4/5;
+                    width: 100%;
+                }
+                .pd__comparison-img { object-fit: cover; }
+                .pd__comparison-label {
+                    position: absolute;
+                    top: 16px;
+                    left: 16px;
+                    z-index: 2;
+                    padding: 4px 16px;
+                    border-radius: 12px;
+                    font-size: 0.82rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    color: #fff;
+                }
+                .pd__comparison-label--before { background: #666; }
+                .pd__comparison-label--after  { background: #2d8a3e; }
+
                 /* ══ SECTION 3 ══════════════════════════════ */
                 .pd__ing-grid {
                     display: flex;
@@ -904,7 +1025,7 @@ export default function ProductPage() {
                     display: flex;
                     gap: 14px;
                     align-items: flex-start;
-                    background: #fff;
+                    background: #E8F5E9;
                     border: 1px solid #C8E6C9;
                     border-radius: 16px;
                     padding: 22px;
@@ -989,7 +1110,7 @@ export default function ProductPage() {
                 }
                 .pd__benefit-card {
                     flex: 0 0 260px;
-                    background: #fff;
+                    background: #E8F5E9;
                     border: 1px solid #C8E6C9;
                     border-radius: 18px;
                     padding: 24px;
@@ -1008,7 +1129,7 @@ export default function ProductPage() {
                     align-items: center;
                     justify-content: center;
                 }
-                .pd__benefit-img { object-fit: contain; }
+                .pd__benefit-img { object-fit: contain; mix-blend-mode: multiply; }
                 .pd__benefit-title { font-size: 1rem; font-weight: 800; color: #1a5c2a; margin: 0 0 8px; }
                 .pd__benefit-desc  { font-size: 0.85rem; color: #666; line-height: 1.6; margin: 0; }
 
@@ -1187,6 +1308,6 @@ export default function ProductPage() {
                 }
                 .pd__sticky-btn:hover { background: linear-gradient(135deg, #1a5c2a, #2d8a3e); }
             `}</style>
-        </div>
+        </div >
     );
 }

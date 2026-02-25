@@ -63,7 +63,7 @@ export default function Home() {
   const reviewsScrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scrolling logic helper
-  const setupAutoScroll = (ref: React.RefObject<HTMLDivElement>, speed: number) => {
+  const setupAutoScroll = (ref: React.RefObject<HTMLDivElement | null>, speed: number) => {
     const el = ref.current;
     if (!el) return;
 
@@ -164,19 +164,27 @@ export default function Home() {
       <section className="hm__trust-strip">
         <div className="hm__trust-inner">
           <div className="hm__trust-item">
-            <span className="hm__trust-icon">🌿</span>
+            <div className="hm__trust-icon">
+              <Image src="/homePageIcon/2.png" alt="Herbal" width={28} height={28} className="hm__trust-img" />
+            </div>
             <span className="hm__trust-text">100% Herbal</span>
           </div>
           <div className="hm__trust-item">
-            <span className="hm__trust-icon">💵</span>
+            <div className="hm__trust-icon">
+              <Image src="/homePageIcon/3.png" alt="COD" width={28} height={28} className="hm__trust-img" />
+            </div>
             <span className="hm__trust-text">COD Available</span>
           </div>
           <div className="hm__trust-item">
-            <span className="hm__trust-icon">🇮🇳</span>
+            <div className="hm__trust-icon">
+              <Image src="/homePageIcon/shipping_india.png" alt="Shipping" width={28} height={28} className="hm__trust-img" />
+            </div>
             <span className="hm__trust-text">Pan India Shipping</span>
           </div>
           <div className="hm__trust-item">
-            <span className="hm__trust-icon">🔒</span>
+            <div className="hm__trust-icon">
+              <Image src="/homePageIcon/4.png" alt="Payments" width={28} height={28} className="hm__trust-img" />
+            </div>
             <span className="hm__trust-text">Secure Payments</span>
           </div>
         </div>
@@ -260,6 +268,41 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════
+                5.5️⃣ BEFORE & AFTER
+            ══════════════════════════════════════════════ */}
+      <section className="hm__section hm__section--white" id="results">
+        <div className="hm__section-inner">
+          <h2 className="hm__sec-title text-center">Visible Transformation</h2>
+          <div className="hm__before-after-grid">
+            <div className="hm__ba-card">
+              <div className="hm__ba-label hm__ba-label--before">Before</div>
+              <div className="hm__ba-img-wrap">
+                <Image src="/BeforeAfterImage/before.png" alt="Before using Sanjari" fill className="hm__ba-img" />
+              </div>
+            </div>
+            <div className="hm__ba-card">
+              <div className="hm__ba-label hm__ba-label--after">After</div>
+              <div className="hm__ba-img-wrap">
+                <Image src="/BeforeAfterImage/after.png" alt="After using Sanjari" fill className="hm__ba-img" />
+              </div>
+            </div>
+            <div className="hm__ba-card">
+              <div className="hm__ba-label hm__ba-label--before">Before</div>
+              <div className="hm__ba-img-wrap">
+                <Image src="/BeforeAfterImage/Before1.png" alt="Before using Sanjari" fill className="hm__ba-img" />
+              </div>
+            </div>
+            <div className="hm__ba-card">
+              <div className="hm__ba-label hm__ba-label--after">After</div>
+              <div className="hm__ba-img-wrap">
+                <Image src="/BeforeAfterImage/After2.png" alt="After using Sanjari" fill className="hm__ba-img" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
                 6️⃣ REAL CUSTOMER REVIEWS
             ══════════════════════════════════════════════ */}
       <section className="hm__section hm__section--light" id="reviews">
@@ -287,31 +330,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════
-                7️⃣ DELIVERY & POLICY SUMMARY
-            ══════════════════════════════════════════════ */}
-      <section className="hm__section hm__section--white" id="delivery">
-        <div className="hm__section-inner">
-          <div className="hm__delivery-grid">
-            <div className="hm__delivery-item">
-              <span className="hm__delivery-icon">📅</span>
-              <span className="hm__delivery-text">5–10 days delivery</span>
-            </div>
-            <div className="hm__delivery-item">
-              <span className="hm__delivery-icon">🔄</span>
-              <span className="hm__delivery-text">Damage replacement only</span>
-            </div>
-            <div className="hm__delivery-item">
-              <span className="hm__delivery-icon">🚫</span>
-              <span className="hm__delivery-text">No refunds</span>
-            </div>
-            <div className="hm__delivery-item">
-              <span className="hm__delivery-icon">🔒</span>
-              <span className="hm__delivery-text">Secure Razorpay payment</span>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* ══════════════════════════════════════════════
                 8️⃣ FAQ PREVIEW
@@ -556,7 +575,15 @@ export default function Home() {
                     align-items: center;
                     gap: 10px;
                 }
-                .hm__trust-icon { font-size: 1.5rem; }
+                .hm__trust-icon { 
+                    width: 28px;
+                    height: 28px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+                .hm__trust-img { object-fit: contain; mix-blend-mode: multiply; }
                 .hm__trust-text {
                     font-size: 0.95rem;
                     font-weight: 700;
@@ -573,7 +600,7 @@ export default function Home() {
                 }
                 .hm__benefit-card {
                     flex: 0 0 280px;
-                    background: #fff;
+                    background: #E8F5E9;
                     border: 1px solid #C8E6C9;
                     border-radius: 18px;
                     padding: 32px 24px;
@@ -592,7 +619,7 @@ export default function Home() {
                     align-items: center;
                     justify-content: center;
                 }
-                .hm__benefit-img { object-fit: contain; }
+                .hm__benefit-img { object-fit: contain; mix-blend-mode: multiply; }
                 .hm__benefit-title { font-size: 1.1rem; font-weight: 800; color: #1a5c2a; margin: 0 0 8px; }
                 .hm__benefit-desc { font-size: 0.875rem; color: #666; line-height: 1.6; margin: 0; }
 
@@ -606,7 +633,7 @@ export default function Home() {
                 }
                 .hm__ing-card {
                     flex: 0 0 320px;
-                    background: #fff;
+                    background: #E8F5E9;
                     border: 1px solid #C8E6C9;
                     border-radius: 16px;
                     padding: 24px;
@@ -634,7 +661,7 @@ export default function Home() {
                     gap: 24px;
                 }
                 .hm__step-card {
-                    background: #fafdfa;
+                    background: #E8F5E9;
                     border: 1px dashed #C8E6C9;
                     border-radius: 20px;
                     padding: 32px 24px;
@@ -652,7 +679,48 @@ export default function Home() {
                 .hm__step-title { font-size: 1.2rem; font-weight: 800; color: #1a5c2a; margin: 0 0 12px; }
                 .hm__step-desc { font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0; }
 
-                /* ══ 6️⃣ REVIEWS ═════════════════════════════ */
+                /* ══ 5.5 BEFORE & AFTER ═════════════════════ */
+                .hm__before-after-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                }
+                @media (max-width: 900px) {
+                    .hm__before-after-grid { grid-template-columns: 1fr 1fr; }
+                }
+                @media (max-width: 500px) {
+                    .hm__before-after-grid { grid-template-columns: 1fr; }
+                }
+                .hm__ba-card {
+                    position: relative;
+                    border-radius: 20px;
+                    overflow: hidden;
+                    border: 1px solid #C8E6C9;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                }
+                .hm__ba-img-wrap {
+                    position: relative;
+                    aspect-ratio: 4/5;
+                    width: 100%;
+                }
+                .hm__ba-img { object-fit: cover; }
+                .hm__ba-label {
+                    position: absolute;
+                    top: 14px;
+                    left: 14px;
+                    z-index: 2;
+                    padding: 4px 14px;
+                    border-radius: 10px;
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
+                    color: #fff;
+                }
+                .hm__ba-label--before { background: #666; }
+                .hm__ba-label--after  { background: #2d8a3e; }
+
+                /* ══ 6️⃣ REVIEWS ══════════════════════════ */
                 .hm__reviews-grid {
                     display: flex;
                     gap: 18px;
@@ -705,28 +773,7 @@ export default function Home() {
                     border-radius: 10px;
                 }
 
-                /* ══ 7️⃣ DELIVERY & POLICY ═══════════════════ */
-                .hm__delivery-grid {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    gap: 24px;
-                    background: #fafdfa;
-                    padding: 32px;
-                    border-radius: 20px;
-                    border: 1px solid #E0E0E0;
-                }
-                .hm__delivery-item {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    background: #fff;
-                    padding: 12px 20px;
-                    border-radius: 12px;
-                    border: 1px solid #E0E0E0;
-                }
-                .hm__delivery-icon { font-size: 1.4rem; }
-                .hm__delivery-text { font-size: 0.9rem; font-weight: 700; color: #444; }
+
 
                 /* ══ 8️⃣ FAQ ═════════════════════════════════ */
                 .hm__faq-list { display: flex; flex-direction: column; gap: 8px; }

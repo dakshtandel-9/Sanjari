@@ -124,10 +124,6 @@ export default function Footer() {
                     {/* ── Col 4: Legal + Trust ── */}
                     <div className="ftr__col">
                         <h3 className="ftr__heading">Legal &amp; Trust</h3>
-                        <div className="ftr__gst">
-                            <span className="ftr__gst-label">GST No.</span>
-                            <span className="ftr__gst-val">29ABCDE1234F1Z5</span>
-                        </div>
                         <nav className="ftr__nav" aria-label="Legal links">
                             <FLink href="/terms">Terms &amp; Conditions</FLink>
                             <FLink href="/privacy">Privacy Policy</FLink>
@@ -189,10 +185,6 @@ export default function Footer() {
                         <FLink href="/faqs">FAQs</FLink>
                     </AccordionGroup>
                     <AccordionGroup title="Legal &amp; Trust">
-                        <div className="ftr__gst" style={{ marginBottom: 10 }}>
-                            <span className="ftr__gst-label">GST No.</span>
-                            <span className="ftr__gst-val">29ABCDE1234F1Z5</span>
-                        </div>
                         <FLink href="/terms">Terms &amp; Conditions</FLink>
                         <FLink href="/privacy">Privacy Policy</FLink>
                         <div className="ftr__trust-list" style={{ marginTop: 10 }}>
@@ -360,32 +352,6 @@ export default function Footer() {
                 }
                 .ftr-link:hover { color: #1a5c2a; padding-left: 4px; }
                 .ftr-link:hover::before { opacity: 1; }
-
-                /* ── GST box ── */
-                .ftr__gst {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2px;
-                    background: #ffffff;
-                    border: 1px solid #C8E6C9;
-                    border-left: 3px solid #388E3C;
-                    border-radius: 8px;
-                    padding: 10px 14px;
-                    margin-bottom: 16px;
-                }
-                .ftr__gst-label {
-                    font-size: 0.65rem;
-                    font-weight: 700;
-                    color: #388E3C;
-                    text-transform: uppercase;
-                    letter-spacing: 0.1em;
-                }
-                .ftr__gst-val {
-                    font-family: "Courier New", monospace;
-                    font-size: 0.82rem;
-                    color: #212121;
-                    letter-spacing: 0.04em;
-                }
 
                 /* ── Trust badges — small horizontal cert pills ── */
                 .ftr__badges {

@@ -6,8 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-/* ─── Offer bar messages ─── */
-const OFFERS = [
+/* ─── Default Offer messages ─── */
+const DEFAULT_OFFERS = [
     "🌿 Free Shipping on Orders Above ₹499 — Limited Time!",
     "🪴 100% Natural · No Parabens · No Sulphates · Dermatologist Tested",
     "✨ Use Code SANJARI10 for 10% OFF on Your First Order →",
@@ -49,17 +49,35 @@ function CloseIcon({ size = 18 }: { size?: number }) {
 /* ═══ HEADER ═══ */
 export default function Header() {
     const pathname = usePathname();
+    if (pathname?.startsWith("/admin")) return null;
 
     /* ── Offer bar ── */
+    const [offers, setOffers] = useState<string[]>(DEFAULT_OFFERS);
     const [offerIdx, setOfferIdx] = useState(0);
     const [offerAnim, setOfferAnim] = useState(false);
     const [offerHidden, setOfferHidden] = useState(false);
 
     useEffect(() => {
+        const fetchOffers = async () => {
+            try {
+                const res = await fetch("/api/admin/config");
+                const data = await res.json();
+                if (data.settings?.header_offers) {
+                    const parsed = JSON.parse(data.settings.header_offers);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        setOffers(parsed);
+                    }
+                }
+            } catch (e) { console.error("Failed to load offers", e); }
+        };
+        fetchOffers();
+    }, []);
+
+    useEffect(() => {
         const id = setInterval(() => {
             setOfferAnim(true);
             setTimeout(() => {
-                setOfferIdx(i => (i + 1) % OFFERS.length);
+                setOfferIdx(i => (i + 1) % offers.length);
                 setOfferAnim(false);
             }, 350);
         }, 4500);
@@ -119,12 +137,12 @@ export default function Header() {
                             className={`offer-bar__text ${offerAnim ? "offer-bar__text--hidden" : "offer-bar__text--visible"}`}
                             aria-live="polite"
                         >
-                            {OFFERS[offerIdx]}
+                            {offers[offerIdx]}
                         </p>
 
                         {/* Dot indicators */}
                         <div className="offer-bar__dots" aria-hidden="true">
-                            {OFFERS.map((_, i) => (
+                            {offers.map((_: any, i: number) => (
                                 <span
                                     key={i}
                                     className={`offer-bar__dot ${i === offerIdx ? "offer-bar__dot--active" : ""}`}

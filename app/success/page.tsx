@@ -13,7 +13,6 @@ function SuccessContent() {
     const orderId = searchParams.get("order_id");
     const [quantity, setQuantity] = useState(1);
 
-
     useEffect(() => {
         // Sync quantity
         const savedQty = localStorage.getItem("sanjari_qty");
@@ -77,14 +76,23 @@ function SuccessContent() {
                 Your order is confirmed and will be packed with care.
             </p>
 
+            {/* ── Order Number Banner ── */}
+            {orderId && (
+                <div className="succ__order-banner">
+                    <span className="succ__order-banner__label">Your Order Number</span>
+                    <span className="succ__order-banner__id">#{orderId}</span>
+                    <span className="succ__order-banner__hint">Save this for tracking & support</span>
+                </div>
+            )}
+
             {/* ── Order details card ── */}
             <div className="succ__card">
-                {orderId && (
-                    <div className="succ__row">
-                        <span className="succ__row-label">Order ID</span>
-                        <span className="succ__row-val succ__row-val--id">#{orderId}</span>
-                    </div>
-                )}
+                <div className="succ__row">
+                    <span className="succ__row-label">Order ID</span>
+                    <span className="succ__row-val succ__row-val--id">
+                        {orderId ? `#${orderId}` : "Generating…"}
+                    </span>
+                </div>
                 <div className="succ__row">
                     <span className="succ__row-label">Status</span>
                     <span className="succ__status-pill">✓ Confirmed</span>
@@ -324,6 +332,41 @@ export default function SuccessPage() {
                 .succ__brand {
                     color: #2d8a3e;
                     font-weight: 700;
+                }
+
+                /* ── Order Number Banner ─────────────────── */
+                .succ__order-banner {
+                    width: 100%;
+                    background: linear-gradient(135deg, #1a5c2a 0%, #2d8a3e 100%);
+                    border-radius: 16px;
+                    padding: 20px 24px;
+                    margin-bottom: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 6px;
+                    text-align: center;
+                    box-shadow: 0 8px 28px rgba(45,138,62,0.25);
+                }
+                .succ__order-banner__label {
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    letter-spacing: 0.12em;
+                    text-transform: uppercase;
+                    color: rgba(255,255,255,0.75);
+                }
+                .succ__order-banner__id {
+                    font-family: var(--font-poppins, Poppins, monospace);
+                    font-size: 2rem;
+                    font-weight: 800;
+                    color: #fff;
+                    letter-spacing: 0.08em;
+                    line-height: 1.1;
+                }
+                .succ__order-banner__hint {
+                    font-size: 0.75rem;
+                    color: rgba(255,255,255,0.65);
+                    margin-top: 2px;
                 }
 
                 /* ── Order details card ─────────────────── */

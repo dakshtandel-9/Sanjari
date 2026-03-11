@@ -27,6 +27,15 @@ function CartIcon() {
     );
 }
 
+function CopyIcon() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+        </svg>
+    );
+}
+
 /* ─── Color palette data ─── */
 const COLORS = [
     {
@@ -74,6 +83,18 @@ const TYPE_SCALE = [
     { label: "CTA / Button", size: "16px", weight: "600 SemiBold", font: "Poppins", usage: "Button labels · CTAs · Badges", sampleSize: "1rem", sampleWeight: 600 },
 ];
 
+function HexToken({ hex, onCopy }: { hex: string; onCopy: (h: string) => void }) {
+    return (
+        <button
+            className="ds-hex-token"
+            onClick={(e) => { e.stopPropagation(); onCopy(hex); }}
+            title={`Click to copy ${hex}`}
+        >
+            {hex}
+        </button>
+    );
+}
+
 /* ─── Component ─── */
 export default function DesignPage() {
     const [copiedHex, setCopiedHex] = useState<string | null>(null);
@@ -111,7 +132,17 @@ export default function DesignPage() {
                 {/* ════════════════════════════════════════
             1. COLOR SYSTEM
         ════════════════════════════════════════ */}
-                <Section id="colors" label="01" title="Color System" description='Primary Brand Green: #388E3C · Color usage ratio: 70% White · 20% Light Green · 10% Primary Green · 5% Red Accent'>
+                <Section
+                    id="colors"
+                    label="01"
+                    title="Color System"
+                    description={
+                        <>
+                            Primary Brand Green: <HexToken hex="#388E3C" onCopy={copyHex} /> ·
+                            Color usage ratio: 70% White · 20% Light Green · 10% Primary Green · 5% Red Accent
+                        </>
+                    }
+                >
 
                     {COLORS.map((group) => (
                         <div key={group.group} className="ds-color-group">
@@ -126,7 +157,10 @@ export default function DesignPage() {
                                         style={{ background: s.hex, border: s.border ? "1px solid #e0e0e0" : "none" }}
                                     >
                                         <div className="ds-swatch__body" style={{ color: s.textColor }}>
-                                            <span className="ds-swatch__hex">{copiedHex === s.hex ? "✓ Copied!" : s.hex}</span>
+                                            <span className="ds-swatch__hex">
+                                                {copiedHex === s.hex ? "✓ Copied!" : s.hex}
+                                                {copiedHex !== s.hex && <CopyIcon />}
+                                            </span>
                                             <span className="ds-swatch__name">{s.name}</span>
                                             {s.ratio !== "—" && <span className="ds-swatch__ratio">{s.ratio}</span>}
                                         </div>
@@ -152,7 +186,7 @@ export default function DesignPage() {
                             </div>
                         </div>
                         <div className="ds-ratio-note">
-                            🔴 Accent Red (#D32F2F) used at maximum 5% — discounts and sale urgency only.
+                            🔴 Accent Red (<HexToken hex="#D32F2F" onCopy={copyHex} />) used at maximum 5% — discounts and sale urgency only.
                         </div>
                     </div>
                 </Section>
@@ -239,7 +273,18 @@ export default function DesignPage() {
                 {/* ════════════════════════════════════════
             3. BUTTON SYSTEM
         ════════════════════════════════════════ */}
-                <Section id="buttons" label="03" title="Button Design System" description="Primary Brand Green #388E3C · Hover #2E7D32 · Poppins SemiBold 16px · Border Radius 8px · Padding 14px 24px">
+                <Section
+                    id="buttons"
+                    label="03"
+                    title="Button Design System"
+                    description={
+                        <>
+                            Primary Brand Green <HexToken hex="#388E3C" onCopy={copyHex} /> ·
+                            Hover <HexToken hex="#2E7D32" onCopy={copyHex} /> ·
+                            Poppins SemiBold 16px · Border Radius 8px · Padding 14px 24px
+                        </>
+                    }
+                >
 
                     {/* Primary */}
                     <div className="ds-btn-group">
@@ -384,6 +429,12 @@ export default function DesignPage() {
 
             {/* Mobile sticky demo — shows on mobile only */}
             <MobileStickyButton label="Buy Now" price="₹349" href="/product" />
+
+            {/* Toast notification */}
+            <div className={`ds-toast ${copiedHex ? "is-visible" : ""}`}>
+                <CopyIcon />
+                <span>Copied to clipboard!</span>
+            </div>
 
             <style>{`
         /* ═══ PAGE LAYOUT ═══ */
@@ -530,7 +581,21 @@ export default function DesignPage() {
           gap: 4px;
           min-height: 90px;
         }
-        .ds-swatch__hex { font-family: "Courier New", monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.9; }
+          font-weight: 700;
+        }
+        .ds-swatch__hex { 
+          font-family: var(--font-inter, monospace); 
+          font-size: 0.85rem; 
+          font-weight: 700; 
+          opacity: 0.9; 
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .ds-swatch:hover .ds-swatch__hex svg {
+          transform: scale(1.1);
+          color: #fff;
+        }
         .ds-swatch__name { font-size: 0.78rem; font-weight: 600; opacity: 0.85; }
         .ds-swatch__ratio { 
           margin-top: 4px;
@@ -581,6 +646,57 @@ export default function DesignPage() {
           padding: 10px 14px;
           font-weight: 500;
         }
+
+        /* ═══ INTERACTIVE HEX TOKENS ═══ */
+        .ds-hex-token {
+          display: inline-flex;
+          align-items: center;
+          background: #fff;
+          border: 1px solid #c8e6c9;
+          color: #388E3C;
+          font-family: var(--font-inter, monospace);
+          font-size: 0.85rem;
+          font-weight: 700;
+          padding: 2px 8px;
+          border-radius: 6px;
+          cursor: pointer;
+          margin: 0 4px;
+          transition: all 0.2s;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .ds-hex-token:hover {
+          background: #388E3C;
+          color: #fff;
+          border-color: #388E3C;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(56, 142, 60, 0.2);
+        }
+
+        .ds-toast {
+          position: fixed;
+          bottom: 24px;
+          left: 50%;
+          transform: translateX(-50%) translateY(100px);
+          background: #212121;
+          color: #fff;
+          padding: 12px 24px;
+          border-radius: 50px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          z-index: 9999;
+          transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+          opacity: 0;
+          pointer-events: none;
+        }
+        .ds-toast.is-visible {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+        .ds-toast svg { color: #81c784; }
 
         /* ═══ TYPOGRAPHY ═══ */
         .ds-type-fonts {
@@ -704,7 +820,7 @@ export default function DesignPage() {
 
 /* ═══ Section wrapper component ═══ */
 function Section({ id, label, title, description, children }: {
-    id: string; label: string; title: string; description: string; children: React.ReactNode;
+    id: string; label: string; title: string; description: React.ReactNode; children: React.ReactNode;
 }) {
     return (
         <section className="ds-section" id={id}>

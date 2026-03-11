@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
 /* ═══════════════════════════════════════════
@@ -52,6 +53,8 @@ export default function AdminPage() {
     const [slides, setSlides] = useState<any[]>([]);
     const [contacts, setContacts] = useState<any[]>([]);
     const [shippingCharge, setShippingCharge] = useState("60");
+    const [adminOffers, setAdminOffers] = useState<string[]>([]);
+    const [newOffer, setNewOffer] = useState("");
     const [suppressWarning, setSuppressWarning] = useState(false);
 
     // Coupon form
@@ -61,10 +64,11 @@ export default function AdminPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [paymentFilter, setPaymentFilter] = useState("all");
+    const [dateFilter, setDateFilter] = useState("all");
+    const [customFrom, setCustomFrom] = useState("");
+    const [customTo, setCustomTo] = useState("");
 
     // Slide upload
-    const [slideTitle, setSlideTitle] = useState("");
-    const [slideSubtitle, setSlideSubtitle] = useState("");
     const [slideFile, setSlideFile] = useState<File | null>(null);
     const [slidePreview, setSlidePreview] = useState<string | null>(null);
     const [mobileSlidrFile, setMobileSlideFile] = useState<File | null>(null);
@@ -88,6 +92,12 @@ export default function AdminPage() {
         const data = await res.json();
         if (data.coupons) setCoupons(data.coupons);
         if (data.settings?.shipping_charge) setShippingCharge(data.settings.shipping_charge);
+        if (data.settings?.header_offers) {
+            try {
+                const parsed = JSON.parse(data.settings.header_offers);
+                if (Array.isArray(parsed)) setAdminOffers(parsed);
+            } catch { setAdminOffers([]); }
+        }
         fetchSlides();
         fetchContacts();
     };
@@ -121,6 +131,25 @@ export default function AdminPage() {
     const updateShipping = async () => {
         const res = await fetch("/api/admin/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "setting", data: { key: "shipping_charge", value: shippingCharge } }) });
         if (res.ok) alert("Shipping charge updated!");
+    };
+
+    const updateOffers = async (updatedOffers: string[]) => {
+        const res = await fetch("/api/admin/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "setting", data: { key: "header_offers", value: JSON.stringify(updatedOffers) } }) });
+        if (res.ok) {
+            setAdminOffers(updatedOffers);
+        }
+    };
+
+    const addOffer = () => {
+        if (!newOffer.trim()) return;
+        const up = [...adminOffers, newOffer.trim()];
+        updateOffers(up);
+        setNewOffer("");
+    };
+
+    const removeOffer = (index: number) => {
+        const up = adminOffers.filter((_, i) => i !== index);
+        updateOffers(up);
     };
 
     const addCoupon = async () => {
@@ -159,9 +188,9 @@ export default function AdminPage() {
         try {
             const imageUrl = await uploadFileToSupabase(slideFile, "desktop");
             const mobileImageUrl = mobileSlidrFile ? await uploadFileToSupabase(mobileSlidrFile, "mobile") : null;
-            const res = await fetch("/api/admin/slides", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", data: { image_url: imageUrl, mobile_image_url: mobileImageUrl, title: slideTitle, subtitle: slideSubtitle, sort_order: slides.length } }) });
+            const res = await fetch("/api/admin/slides", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", data: { image_url: imageUrl, mobile_image_url: mobileImageUrl, sort_order: slides.length } }) });
             if (!res.ok) throw new Error((await res.json()).error || "Failed");
-            setSlideFile(null); setSlidePreview(null); setMobileSlideFile(null); setMobileSlidePreview(null); setSlideTitle(""); setSlideSubtitle("");
+            setSlideFile(null); setSlidePreview(null); setMobileSlideFile(null); setMobileSlidePreview(null);
             if (fileInputRef.current) fileInputRef.current.value = "";
             if (mobileFileInputRef.current) mobileFileInputRef.current.value = "";
             fetchSlides(); alert("Slide uploaded!");
@@ -179,30 +208,78 @@ export default function AdminPage() {
 
     /* ── LOGIN ── */
     if (!isLoggedIn) return (
-        <div className="adm-login">
-            <div className="adm-login__card">
-                <div className="adm-login__brand">
-                    <span className="adm-login__leaf">🌿</span>
-                    <h1 className="adm-login__title">Sanjari Admin</h1>
-                    <p className="adm-login__sub">Sign in to manage your store</p>
-                </div>
-                <form onSubmit={handleLogin} className="adm-login__form">
-                    <div className="adm-field">
-                        <label className="adm-label">Password</label>
-                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter admin password" className="adm-input" autoFocus />
+        <>
+            <div className="adm-login">
+                <div className="adm-login__card">
+                    <div className="adm-login__brand">
+                        <Image
+                            src="/SANJARI.png"
+                            alt="Sanjari Logo"
+                            width={180}
+                            height={58}
+                            priority
+                            style={{ objectFit: 'contain', margin: '0 auto 12px' }}
+                        />
+                        <p className="adm-login__sub">Sign in to manage your store</p>
                     </div>
-                    {error && <p className="adm-error">{error}</p>}
-                    <button type="submit" disabled={isLoading} className="adm-btn--primary" style={{ width: "100%" }}>
-                        {isLoading ? "Signing in…" : "Sign In"}
-                    </button>
-                </form>
+                    <form onSubmit={handleLogin} className="adm-login__form">
+                        <div className="adm-field">
+                            <label className="adm-label">Password</label>
+                            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter admin password" className="adm-input" autoFocus />
+                        </div>
+                        {error && <p className="adm-error">{error}</p>}
+                        <button type="submit" disabled={isLoading} className="adm-btn--primary" style={{ width: "100%" }}>
+                            {isLoading ? "Signing in…" : "Sign In"}
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+            <style>{`
+                .adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0faf0 0%, #e8f5e9 100%); padding: 24px; font-family: var(--font-inter, Inter, system-ui, sans-serif); }
+                .adm-login__card { background: #fff; border: 1px solid #C8E6C9; border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 400px; box-shadow: 0 8px 40px rgba(26,92,42,0.10); }
+                .adm-login__brand { text-align: center; margin-bottom: 36px; }
+                .adm-login__sub { color: #666; font-size: 0.9rem; margin: 0; }
+                .adm-login__form { display: flex; flex-direction: column; gap: 16px; }
+                .adm-field { display: flex; flex-direction: column; gap: 8px; }
+                .adm-label { font-size: 0.78rem; font-weight: 700; color: #2d8a3e; text-transform: uppercase; letter-spacing: 0.05em; }
+                .adm-input { background: #f7fdf7; border: 1.5px solid #C8E6C9; border-radius: 10px; padding: 11px 14px; font-size: 0.9rem; color: #212121; outline: none; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+                .adm-input:focus { border-color: #2d8a3e; box-shadow: 0 0 0 3px rgba(45,138,62,0.08); }
+                .adm-btn--primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; background: linear-gradient(135deg, #2d8a3e, #388E3C); color: #fff; font-size: 0.9rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; letter-spacing: 0.01em; box-shadow: 0 4px 12px rgba(45,138,62,0.25); transition: transform 0.15s, box-shadow 0.15s; }
+                .adm-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(45,138,62,0.3); }
+                .adm-error { color: #D32F2F; font-size: 0.85rem; background: #fff3f3; border: 1px solid #ffcdd2; border-radius: 8px; padding: 10px 14px; margin: 0; }
+            `}</style>
+        </>
     );
-
     /* ── DASHBOARD ── */
-    const pendingCount = orders.filter(o => o.status === "pending").length;
-    const todayRevenue = orders.filter(o => { const d = new Date(o.created_at); const n = new Date(); return d.toDateString() === n.toDateString(); }).reduce((s, o) => s + Number(o.amount || 0), 0);
+    const stats = {
+        totalOrders: orders.length,
+        pendingOrders: orders.filter(o => o.status === "pending").length,
+        totalRevenue: orders
+            .filter(o => o.status !== "canceled" && o.status !== "rejected")
+            .reduce((s, o) => s + Number(o.amount || 0), 0),
+        todayOrders: orders.filter(o => {
+            const d = new Date(o.created_at);
+            const n = new Date();
+            return d.toDateString() === n.toDateString();
+        }).length,
+        todayRevenue: orders
+            .filter(o => {
+                const d = new Date(o.created_at);
+                const n = new Date();
+                return d.toDateString() === n.toDateString() && o.status !== "canceled" && o.status !== "rejected";
+            })
+            .reduce((s, o) => s + Number(o.amount || 0), 0),
+        monthRevenue: orders
+            .filter(o => {
+                const d = new Date(o.created_at);
+                const n = new Date();
+                return d.getMonth() === n.getMonth() && d.getFullYear() === n.getFullYear() && o.status !== "canceled" && o.status !== "rejected";
+            })
+            .reduce((s, o) => s + Number(o.amount || 0), 0),
+        aov: orders.filter(o => o.status !== "canceled" && o.status !== "rejected").length > 0
+            ? orders.filter(o => o.status !== "canceled" && o.status !== "rejected").reduce((s, o) => s + Number(o.amount || 0), 0) / orders.filter(o => o.status !== "canceled" && o.status !== "rejected").length
+            : 0
+    };
 
     return (
         <div className="adm">
@@ -210,14 +287,20 @@ export default function AdminPage() {
             {/* ── Sidebar ── */}
             <aside className={`adm-sidebar ${sidebarOpen ? "adm-sidebar--open" : ""}`}>
                 <div className="adm-sidebar__brand">
-                    <span className="adm-sidebar__leaf">🌿</span>
-                    <span className="adm-sidebar__name">Sanjari</span>
+                    <Image
+                        src="/SANJARI.png"
+                        alt="Sanjari Logo"
+                        width={140}
+                        height={44}
+                        priority
+                        style={{ objectFit: 'contain' }}
+                    />
                 </div>
                 <nav className="adm-sidebar__nav">
                     {TABS.map(t => (
                         <button key={t.id} onClick={() => { setActiveTab(t.id); setSidebarOpen(false); }} className={`adm-sidebar__link ${activeTab === t.id ? "adm-sidebar__link--active" : ""}`}>
                             <t.Icon />{t.label}
-                            {t.id === "orders" && pendingCount > 0 && <span className="adm-sidebar__badge">{pendingCount}</span>}
+                            {t.id === "orders" && stats.pendingOrders > 0 && <span className="adm-sidebar__badge">{stats.pendingOrders}</span>}
                             {t.id === "contacts" && contacts.length > 0 && <span className="adm-sidebar__badge">{contacts.length}</span>}
                         </button>
                     ))}
@@ -247,20 +330,41 @@ export default function AdminPage() {
                 {/* Stat cards (orders tab) */}
                 {activeTab === "orders" && (
                     <div className="adm-stats">
-                        <div className="adm-stat"><div className="adm-stat__label">Total Orders</div><div className="adm-stat__val">{orders.length}</div></div>
-                        <div className="adm-stat adm-stat--yellow"><div className="adm-stat__label">Pending</div><div className="adm-stat__val">{pendingCount}</div></div>
-                        <div className="adm-stat adm-stat--green"><div className="adm-stat__label">Today&apos;s Revenue</div><div className="adm-stat__val">₹{todayRevenue.toLocaleString("en-IN")}</div></div>
-                        <div className="adm-stat"><div className="adm-stat__label">Active Coupons</div><div className="adm-stat__val">{coupons.length}</div></div>
+                        <div className="adm-stat">
+                            <div className="adm-stat__label">Total Orders</div>
+                            <div className="adm-stat__val">{stats.totalOrders}</div>
+                        </div>
+                        <div className="adm-stat adm-stat--yellow">
+                            <div className="adm-stat__label">Pending</div>
+                            <div className="adm-stat__val">{stats.pendingOrders}</div>
+                        </div>
+                        <div className="adm-stat adm-stat--green">
+                            <div className="adm-stat__label">Total Revenue</div>
+                            <div className="adm-stat__val">₹{stats.totalRevenue.toLocaleString("en-IN")}</div>
+                        </div>
+                        <div className="adm-stat">
+                            <div className="adm-stat__label">Monthly Rev.</div>
+                            <div className="adm-stat__val">₹{stats.monthRevenue.toLocaleString("en-IN")}</div>
+                        </div>
+                        <div className="adm-stat adm-stat--blue">
+                            <div className="adm-stat__label">Avg. Order Value</div>
+                            <div className="adm-stat__val">₹{Math.round(stats.aov).toLocaleString("en-IN")}</div>
+                        </div>
                     </div>
                 )}
 
                 <div className="adm-content">
-
                     {/* ── ORDERS ── */}
                     {activeTab === "orders" && (
-                        <div className="adm-card">
-                            <div className="adm-card__head">
-                                <h2 className="adm-card__title">Customer Orders</h2>
+                        <>
+                            <div className="adm-card">
+                                <div className="adm-card__header" style={{ marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <div>
+                                        <h2 className="adm-card__title">Customer Orders</h2>
+                                        <p className="adm-card__desc">Manage and track your customer purchases. Orders today: <b>{stats.todayOrders}</b> (₹{stats.todayRevenue})</p>
+                                    </div>
+                                    <button onClick={fetchAll} className="adm-btn--ghost" style={{ fontSize: "0.8rem" }}>🔄 Refresh List</button>
+                                </div>
                                 <div className="adm-filters">
                                     <input type="text" placeholder="Search name, email, ID…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="adm-input adm-input--sm" />
                                     <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="adm-select">
@@ -273,7 +377,41 @@ export default function AdminPage() {
                                         <option value="cod">COD</option>
                                     </select>
                                 </div>
+                                {/* Date filter presets */}
+                                <div className="adm-date-filters">
+                                    <span className="adm-date-filters__label">📅 Period:</span>
+                                    {[
+                                        { key: "today", label: "Today" },
+                                        { key: "yesterday", label: "Yesterday" },
+                                        { key: "7d", label: "7 Days" },
+                                        { key: "30d", label: "30 Days" },
+                                        { key: "90d", label: "90 Days" },
+                                        { key: "all", label: "All Time" },
+                                        { key: "custom", label: "Custom" },
+                                    ].map(({ key, label }) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => setDateFilter(key)}
+                                            className={`adm-date-chip ${dateFilter === key ? "adm-date-chip--active" : ""}`}
+                                        >
+                                            {label}
+                                        </button>
+                                    ))}
+                                </div>
+                                {/* Custom date range */}
+                                {dateFilter === "custom" && (
+                                    <div className="adm-custom-range">
+                                        <span className="adm-date-filters__label">From:</span>
+                                        <input type="date" value={customFrom} onChange={e => setCustomFrom(e.target.value)} className="adm-input adm-input--sm adm-input--date" />
+                                        <span className="adm-date-filters__label">To:</span>
+                                        <input type="date" value={customTo} onChange={e => setCustomTo(e.target.value)} className="adm-input adm-input--sm adm-input--date" />
+                                        {(customFrom || customTo) && (
+                                            <button onClick={() => { setCustomFrom(""); setCustomTo(""); }} className="adm-btn--ghost" style={{ fontSize: "0.78rem", padding: "6px 10px" }}>✕ Clear</button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
+
                             {orders.length === 0 ? (
                                 <div className="adm-empty">📦 No orders yet.</div>
                             ) : (
@@ -282,7 +420,7 @@ export default function AdminPage() {
                                         <thead>
                                             <tr>
                                                 <th>ID</th><th>Date</th><th>Customer</th><th>Email / Phone</th>
-                                                <th>Location</th><th>Amount</th><th>Method</th><th>Status</th>
+                                                <th>Location</th><th>Qty</th><th>Amount</th><th>Method</th><th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -291,7 +429,23 @@ export default function AdminPage() {
                                                 const match = !s || [o.customer_name, o.email, o.phone, o.order_id, String(o.id)].some(v => (v || "").toLowerCase().includes(s));
                                                 const st = statusFilter === "all" || o.status?.toLowerCase() === statusFilter;
                                                 const pm = paymentFilter === "all" || o.payment_method?.toLowerCase() === paymentFilter;
-                                                return match && st && pm;
+                                                // Date filter
+                                                const oDate = new Date(o.created_at);
+                                                const now = new Date();
+                                                const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                                                const startOfYesterday = new Date(startOfToday); startOfYesterday.setDate(startOfToday.getDate() - 1);
+                                                const endOfYesterday = new Date(startOfToday);
+                                                let df = true;
+                                                if (dateFilter === "today") df = oDate >= startOfToday;
+                                                else if (dateFilter === "yesterday") df = oDate >= startOfYesterday && oDate < endOfYesterday;
+                                                else if (dateFilter === "7d") df = oDate >= new Date(now.getTime() - 7 * 86400000);
+                                                else if (dateFilter === "30d") df = oDate >= new Date(now.getTime() - 30 * 86400000);
+                                                else if (dateFilter === "90d") df = oDate >= new Date(now.getTime() - 90 * 86400000);
+                                                else if (dateFilter === "custom") {
+                                                    if (customFrom) df = df && oDate >= new Date(customFrom);
+                                                    if (customTo) { const to = new Date(customTo); to.setHours(23, 59, 59, 999); df = df && oDate <= to; }
+                                                }
+                                                return match && st && pm && df;
                                             }).map(o => (
                                                 <tr key={o.id}>
                                                     <td className="adm-table__id">#{o.order_id || `${o.id}`}</td>
@@ -299,6 +453,7 @@ export default function AdminPage() {
                                                     <td className="adm-table__name">{o.customer_name}</td>
                                                     <td>{o.email}<br /><span className="adm-table__sub">{o.phone}</span></td>
                                                     <td><span className="adm-table__sub">Pin: {o.pincode} · {o.state}</span><br /><span className="adm-table__addr" title={o.address}>{o.address}</span></td>
+                                                    <td style={{ fontWeight: 700 }}>{o.quantity || 1}</td>
                                                     <td className="adm-table__amt">₹{o.amount}</td>
                                                     <td><span className={`adm-badge ${o.payment_method === "cod" ? "adm-badge--yellow" : "adm-badge--blue"}`}>{o.payment_method}</span></td>
                                                     <td>
@@ -313,7 +468,7 @@ export default function AdminPage() {
                                     </table>
                                 </div>
                             )}
-                        </div>
+                        </>
                     )}
 
                     {/* ── SLIDES ── */}
@@ -321,7 +476,7 @@ export default function AdminPage() {
                         <div className="adm-split">
                             <div className="adm-card">
                                 <h2 className="adm-card__title">Upload Hero Slide</h2>
-                                <p className="adm-card__desc">Upload images for the homepage hero carousel. Recommended: 1920×1080px desktop, 9:16 portrait mobile.</p>
+                                <p className="adm-card__desc">Upload images for the homepage hero carousel. Recommended: 1500×600px for desktop, 1080×1920px for mobile.</p>
                                 <div className="adm-img-pickers">
                                     <div>
                                         <p className="adm-label" style={{ marginBottom: 8 }}>🖥️ Desktop Image <span style={{ color: "#2d8a3e" }}>*</span></p>
@@ -341,14 +496,6 @@ export default function AdminPage() {
                                         </div>
                                         <input ref={mobileFileInputRef} type="file" accept="image/*" hidden onChange={e => { const f = e.target.files?.[0]; if (f) { setMobileSlideFile(f); setMobileSlidePreview(URL.createObjectURL(f)); } }} />
                                     </div>
-                                </div>
-                                <div className="adm-field" style={{ marginTop: 20 }}>
-                                    <label className="adm-label">Slide Title <span className="adm-opt">(optional)</span></label>
-                                    <input type="text" value={slideTitle} onChange={e => setSlideTitle(e.target.value)} placeholder="e.g. Sanjari Herbal Hair Oil" className="adm-input" />
-                                </div>
-                                <div className="adm-field">
-                                    <label className="adm-label">Slide Subtitle <span className="adm-opt">(optional)</span></label>
-                                    <input type="text" value={slideSubtitle} onChange={e => setSlideSubtitle(e.target.value)} placeholder="e.g. 100% Natural • Ayurvedic Formula" className="adm-input" />
                                 </div>
                                 <button onClick={uploadSlide} disabled={slideUploading || !slideFile} className="adm-btn--primary" style={{ width: "100%", marginTop: 20 }}>
                                     {slideUploading ? "Uploading…" : "Upload Slide"}
@@ -373,8 +520,6 @@ export default function AdminPage() {
                                                         <span className="adm-slide-card__num">#{idx + 1}</span>
                                                     </div>
                                                     <div className="adm-slide-card__body">
-                                                        <p className="adm-slide-card__title">{slide.title || <span className="adm-muted">No title</span>}</p>
-                                                        <p className="adm-slide-card__sub">{slide.subtitle || <span className="adm-muted">No subtitle</span>}</p>
                                                         <button onClick={() => deleteSlide(slide.id)} className="adm-btn--danger" style={{ width: "100%", marginTop: 10 }}><Icon.trash /> Delete</button>
                                                     </div>
                                                 </div>
@@ -465,16 +610,47 @@ export default function AdminPage() {
 
                     {/* ── SETTINGS ── */}
                     {activeTab === "settings" && (
-                        <div className="adm-card" style={{ maxWidth: 480 }}>
-                            <h2 className="adm-card__title">Store Settings</h2>
-                            <div className="adm-field">
-                                <label className="adm-label">COD Shipping Charge (₹)</label>
-                                <input type="number" value={shippingCharge} onChange={e => setShippingCharge(e.target.value)} className="adm-input" />
+                        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                            <div className="adm-card" style={{ maxWidth: 480 }}>
+                                <h2 className="adm-card__title">Store Settings</h2>
+                                <div className="adm-field">
+                                    <label className="adm-label">COD Shipping Charge (₹)</label>
+                                    <input type="number" value={shippingCharge} onChange={e => setShippingCharge(e.target.value)} className="adm-input" />
+                                </div>
+                                <button onClick={updateShipping} className="adm-btn--primary" style={{ width: "100%", marginTop: 8 }}>Save Settings</button>
                             </div>
-                            <button onClick={updateShipping} className="adm-btn--primary" style={{ width: "100%", marginTop: 8 }}>Save Settings</button>
+
+                            <div className="adm-card" style={{ maxWidth: 600 }}>
+                                <h2 className="adm-card__title">Header Offer Bar</h2>
+                                <p className="adm-card__desc">Manage multiple messages that cycle in the green bar at the top of the site.</p>
+
+                                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 15 }}>
+                                    {adminOffers.map((offer, idx) => (
+                                        <div key={idx} style={{ display: "flex", gap: 10, alignItems: "center", background: "#f9f9f9", padding: "8px 12px", borderRadius: 8, border: "1px solid #eee" }}>
+                                            <span style={{ flex: 1, fontSize: "0.9rem" }}>{offer}</span>
+                                            <button onClick={() => removeOffer(idx)} className="adm-btn--danger" style={{ padding: "6px" }} title="Remove"><Icon.trash /></button>
+                                        </div>
+                                    ))}
+
+                                    {adminOffers.length === 0 && (
+                                        <p style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic" }}>No custom offers set. Using defaults.</p>
+                                    )}
+
+                                    <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                                        <input
+                                            type="text"
+                                            placeholder="Add new offer message (e.g. Free shipping on all orders!)"
+                                            value={newOffer}
+                                            onChange={e => setNewOffer(e.target.value)}
+                                            className="adm-input"
+                                            style={{ flex: 1 }}
+                                        />
+                                        <button onClick={addOffer} className="adm-btn--primary">Add</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
-
                 </div>
             </main>
 
@@ -510,7 +686,8 @@ export default function AdminPage() {
           width: 240px; flex-shrink: 0; background: #fff;
           border-right: 1px solid #C8E6C9;
           display: flex; flex-direction: column;
-          position: sticky; top: 0; height: 100vh; overflow-y: auto;
+          position: fixed; left: 0; top: 0; bottom: 0; z-index: 100;
+          overflow-y: auto;
         }
         @media (max-width: 900px) {
           .adm-sidebar {
@@ -522,8 +699,8 @@ export default function AdminPage() {
           .adm-sidebar--open { left: 0; }
         }
         .adm-sidebar__brand {
-          display: flex; align-items: center; gap: 10px;
-          padding: 24px 20px 20px;
+          display: flex; align-items: center; justify-content: center;
+          padding: 24px 20px;
           border-bottom: 1px solid #E8F5E9;
         }
         .adm-sidebar__leaf { font-size: 1.4rem; }
@@ -554,7 +731,11 @@ export default function AdminPage() {
         .adm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 199; }
 
         /* ═══ MAIN ═══════════════════════════════ */
-        .adm-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .adm-main {
+          flex: 1; min-width: 0; display: flex; flex-direction: column;
+          margin-left: 240px;
+        }
+        @media (max-width: 900px) { .adm-main { margin-left: 0; } }
 
         .adm-topbar {
           background: #fff; border-bottom: 1px solid #C8E6C9;
@@ -579,7 +760,7 @@ export default function AdminPage() {
 
         /* ═══ STAT CARDS ═════════════════════════ */
         .adm-stats {
-          display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;
           padding: 24px 28px 0;
         }
         @media (max-width: 900px) { .adm-stats { grid-template-columns: repeat(2, 1fr); padding: 16px 16px 0; } }
@@ -590,6 +771,7 @@ export default function AdminPage() {
         }
         .adm-stat--green { border-top-color: #2d8a3e; }
         .adm-stat--yellow { border-top-color: #f59e0b; }
+        .adm-stat--blue { border-top-color: #3b82f6; }
         .adm-stat__label { font-size: 0.78rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
         .adm-stat__val { font-family: var(--font-poppins, sans-serif); font-size: 1.8rem; font-weight: 800; color: #1a5c2a; }
 
@@ -678,7 +860,36 @@ export default function AdminPage() {
         .adm-table__sub { font-size: 0.72rem; color: #888; }
         .adm-table__addr { font-size: 0.72rem; color: #888; max-width: 160px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .adm-table__amt { font-weight: 800; color: #1a5c2a; }
-        .adm-filters { display: flex; flex-wrap: wrap; gap: 10px; }
+        .adm-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+
+        /* ═══ DATE FILTER CHIPS ══════════════════ */
+        .adm-date-filters {
+          display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+          margin-bottom: 12px;
+        }
+        .adm-date-filters__label {
+          font-size: 0.72rem; font-weight: 700; color: #888;
+          text-transform: uppercase; letter-spacing: 0.06em;
+          margin-right: 2px; white-space: nowrap;
+        }
+        .adm-date-chip {
+          padding: 6px 14px; border-radius: 20px;
+          font-size: 0.78rem; font-weight: 600;
+          border: 1.5px solid #C8E6C9; background: #f7fdf7; color: #555;
+          cursor: pointer; font-family: inherit;
+          transition: all 0.15s;
+        }
+        .adm-date-chip:hover { border-color: #A5D6A7; color: #2d8a3e; background: #E8F5E9; }
+        .adm-date-chip--active { background: #2d8a3e; color: #fff; border-color: #2d8a3e; }
+        .adm-date-chip--active:hover { background: #1a5c2a; border-color: #1a5c2a; }
+
+        .adm-custom-range {
+          display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+          padding: 10px 14px; background: #E8F5E9;
+          border: 1px solid #A5D6A7; border-radius: 12px;
+          margin-bottom: 8px;
+        }
+        .adm-input--date { min-width: 140px; max-width: 160px; cursor: pointer; }
 
         /* ═══ BADGES ═════════════════════════════ */
         .adm-badge { font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
@@ -741,6 +952,6 @@ export default function AdminPage() {
         /* ═══ MISC ═══════════════════════════════ */
         .adm-empty { padding: 48px 20px; text-align: center; color: #aaa; font-size: 0.95rem; font-style: italic; }
       `}</style>
-        </div>
+        </div >
     );
 }

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 /* ─── Social Icons ─── */
 function FacebookIcon() {
@@ -63,6 +64,8 @@ function FLink({ href, children }: { href: string; children: React.ReactNode }) 
    FOOTER
 ════════════════════════════════════════ */
 export default function Footer() {
+    const pathname = usePathname();
+    if (pathname?.startsWith("/admin")) return null;
     return (
         <footer className="ftr" aria-label="Site footer">
 

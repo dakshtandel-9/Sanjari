@@ -138,7 +138,7 @@ export default function CheckoutPage() {
             const res = await fetch("/api/orders/save", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, amount: totalPrice, ...razorpayData }),
+                body: JSON.stringify({ ...formData, amount: totalPrice, quantity, ...razorpayData }),
             });
             const data = await res.json();
             return data.data?.[0]?.order_id || null;

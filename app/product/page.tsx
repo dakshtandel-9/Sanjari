@@ -266,7 +266,7 @@ export default function ProductPage() {
                         <span className="pd__brand-tag">🌿 Sanjari Herbal</span>
 
                         {/* Product name */}
-                        <h1 className="pd__name">Sanjari Ayurvedic Hair Oil</h1>
+                        <h1 className="pd__name">Sanjari Herbal Hair Oil</h1>
 
                         {/* Stars */}
                         <div className="pd__rating-row">

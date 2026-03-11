@@ -174,36 +174,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* Dark overlay */}
-        <div className="hp__hero-overlay">
-          <div className="hp__hero-content">
-            <span className="pd__brand-tag" style={{ color: '#fff' }}>🌿 Purely Ayurvedic</span>
-            <h1 className="hp__hero-title">
-              {slides[activeSlide]?.title || "Sanjari Herbal Hair Oil"}
-            </h1>
-            <p className="hp__hero-desc">
-              {slides[activeSlide]?.subtitle || "Experience the power of nature for stronger, thicker, and healthier hair."}
-            </p>
-
-            <div className="hp__hero-btns">
-              <button onClick={buyNow} className="pd__buy-btn hp__hero-btn">
-                Buy Now — ₹{ITEM_PRICE}
-              </button>
-              <Link href="#about" className="hp__secondary-btn">Learn More</Link>
-            </div>
-
-            <div className="hp__hero-trust">
-              <div className="pd__trust-item-sm" style={{ color: '#fff' }}>
-                <Image src="/homePageIcon/4.png" alt="Secure" width={16} height={16} className="pd__trust-icon-sm" style={{ filter: 'brightness(0) invert(1)' }} />
-                <span>Secure Payment</span>
-              </div>
-              <div className="pd__trust-item-sm" style={{ color: '#fff' }}>
-                <Image src="/homePageIcon/3.png" alt="COD" width={16} height={16} className="pd__trust-icon-sm" style={{ filter: 'brightness(0) invert(1)' }} />
-                <span>COD Available</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Hero content removed to show only images as requested */}
 
         {/* Prev / Next arrows (only when >1 slides) */}
         {slides.length > 1 && (
@@ -587,6 +558,7 @@ export default function Home() {
                     align-items: center;
                     justify-content: center;
                     background: #1a3a22;
+                    margin-top: 0; /* Ensures it starts after sticky header */
                 }
 
                 /* ── Slider track & slides ── */
@@ -615,13 +587,14 @@ export default function Home() {
                     position: absolute;
                     inset: 0;
                     background-size: cover;
-                    background-position: center;
+                    background-position: center top;
                 }
                 /* Desktop: show desktop layer, hide mobile */
                 .hp__slide-layer--desktop { display: block; }
                 .hp__slide-layer--mobile  { display: none; }
                 /* Mobile: swap */
                 @media (max-width: 768px) {
+                    .hp__hero { height: 85vh; }
                     .hp__slide-layer--desktop { display: none; }
                     .hp__slide-layer--mobile  { display: block; }
                 }
@@ -670,9 +643,15 @@ export default function Home() {
                     gap: 16px;
                     margin-top: 8px;
                 }
-                @media (max-width: 600px) {
+                @media (max-width: 768px) {
                     .hp__hero-btns { flex-direction: column; width: 100%; }
-                    .hp__hero { height: 70vh; min-height: 420px; }
+                    .hp__hero { 
+                        height: calc(100svh - 100px); /* Fill space after header */
+                        min-height: 520px; 
+                    }
+                    .hp__slide-layer {
+                        background-position: center top; /* Preserve heads/logo at top of image */
+                    }
                 }
                 .hp__hero-btn {
                     max-width: 280px;

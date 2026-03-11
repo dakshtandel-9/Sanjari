@@ -143,8 +143,61 @@ export default function Home() {
     };
   }, []);
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "Sanjari Herbal Hair Oil",
+    "image": [
+      "https://www.sanjariherbalhairoil.com/productImages/1.png"
+    ],
+    "description": "100% Ayurvedic Herbal Hair Oil for natural hair growth and hair fall control. Free from parabens and sulphates.",
+    "sku": "SJH-100",
+    "mpn": "SJH-100",
+    "brand": {
+      "@type": "Brand",
+      "name": "Sanjari Herbal"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.sanjariherbalhairoil.com",
+      "priceCurrency": "INR",
+      "price": "349",
+      "priceValidUntil": "2030-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.6",
+      "reviewCount": "142",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQS_SHORT.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  };
+
   return (
     <div className="pd__page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* ══════════════════════════════════════════════
                 HERO SECTION — 70VH IMAGE SLIDER
@@ -1168,9 +1221,9 @@ function ContactSection() {
             Our team is here to help — usually within 24 hours.
           </p>
           <div className="hp__contact-links">
-            <a href="mailto:support@sanjari.in" className="hp__contact-link">
+            <a href="mailto:support@sanjariherbalhairoil.com" className="hp__contact-link">
               <span className="hp__contact-link-icon">📧</span>
-              support@sanjari.in
+              support@sanjariherbalhairoil.com
             </a>
             <a href="tel:+919876543210" className="hp__contact-link">
               <span className="hp__contact-link-icon">📞</span>

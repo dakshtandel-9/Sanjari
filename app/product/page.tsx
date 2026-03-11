@@ -225,8 +225,61 @@ export default function ProductPage() {
         };
     }, []);
 
+    const productSchema = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": "Sanjari Herbal Hair Oil",
+        "image": [
+            "https://www.sanjariherbalhairoil.com/productImages/1.png"
+        ],
+        "description": "100% Ayurvedic Herbal Hair Oil for natural hair growth and hair fall control. Free from parabens and sulphates.",
+        "sku": "SJH-100",
+        "mpn": "SJH-100",
+        "brand": {
+            "@type": "Brand",
+            "name": "Sanjari Herbal"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": "https://www.sanjariherbalhairoil.com/product",
+            "priceCurrency": "INR",
+            "price": "349",
+            "priceValidUntil": "2030-12-31",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.6",
+            "reviewCount": "142",
+            "bestRating": "5",
+            "worstRating": "1"
+        }
+    };
+
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": FAQS_SHORT.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    };
+
     return (
         <div className="pd__page">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
 
             {/* ══════════════════════════════════════════════
                 SECTION 1 — ABOVE THE FOLD

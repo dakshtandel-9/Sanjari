@@ -84,13 +84,6 @@ export default function Footer() {
                         <p className="ftr__tagline">
                             Natural Ayurvedic Hair Care for Stronger, Healthier Growth.
                         </p>
-                        <address className="ftr__address">
-                            <p>123, Green Valley, Koramangala</p>
-                            <p>Bangalore, Karnataka – 560034</p>
-                            <p><a href="tel:+917867078601">📞 +91 78670 78601</a></p>
-                            <p><a href="mailto:sanjariherbalhairoil@gmail.com">✉️ sanjariherbalhairoil@gmail.com</a></p>
-
-                        </address>
                         <div className="ftr__social" aria-label="Social media">
                             <a href="https://facebook.com" className="ftr__social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><FacebookIcon /></a>
                             <a href="https://instagram.com" className="ftr__social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><InstagramIcon /></a>

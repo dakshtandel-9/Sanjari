@@ -1,8 +1,10 @@
 # 🌿 Sanjari Herbal Hair Oil — E-Commerce Web App
 
 > **Production URL:** [https://www.sanjariherbalhairoil.com](https://www.sanjariherbalhairoil.com)
+> 
+> **Status:** ✅ Live | 💳 Razorpay Live Payments Active | 🔒 Webhook Configured | 🛡️ SEO/GEO/AEO Ready
 >
-> A full-stack, production-ready e-commerce platform for **Sanjari Herbal Hair Oil** — a 100% Ayurvedic, chemical-free hair care product. Built with Next.js 16, Supabase, and Razorpay, featuring a bespoke admin dashboard, dynamic offer bar, complete SEO/GEO/AEO/SXO optimisation, and a beautiful, conversion-focused UI.
+> A full-stack, production-ready e-commerce platform for **Sanjari Herbal Hair Oil** — a 100% Ayurvedic, chemical-free hair care product. Built with Next.js 16, Supabase, and Razorpay, featuring a bespoke admin dashboard, dynamic offer bar, complete SEO/GEO/AEO/SXO optimisation, live payment gateway, and a beautiful, conversion-focused UI.
 
 ---
 
@@ -189,9 +191,12 @@ Here is a complete reference for every variable:
 - **Used in:** `/api/admin/login` — compared against the password entered on the admin login screen
 - **Example format:** `MyStr0ng!Passw0rd#2025`
 
----
-
-### `NEXT_PUBLIC_SUPABASE_URL`
+### `RAZORPAY_WEBHOOK_SECRET`
+- **What it is:** The secret string you set when creating the webhook in Razorpay Dashboard. Used to verify that incoming webhook requests are genuinely from Razorpay (not spoofed).
+- **Where to set it:** Choose any strong string. Set the same value both here and in the Razorpay Webhook form.
+- **Used in:** `/api/verify-payment` — HMAC-SHA256 verification of the `x-razorpay-signature` header
+- **Current value:** `sanjari2025webhook` (change this for extra security)
+- **Example format:** `MyWebhookSecret2025!`
 - **What it is:** The unique URL of your Supabase project
 - **Where to get it:** [Supabase Dashboard → Your Project → Settings → API → Project URL](https://supabase.com/dashboard)
 - **Used in:** `lib/supabase.ts` — used by both client-side and server-side code to connect to your database and storage

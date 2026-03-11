@@ -8,6 +8,7 @@ const requiredEnv = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "ADMIN_PASSWORD",
+  "RAZORPAY_WEBHOOK_SECRET",
 ];
 
 // Only run check during actual build (not `next dev`)

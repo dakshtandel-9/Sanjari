@@ -436,6 +436,66 @@ export default function ProductPage() {
             </section>
 
             {/* ══════════════════════════════════════════════
+                SECTION 2.1 — PRODUCT & MANUFACTURER DETAILS
+            ══════════════════════════════════════════════ */}
+            <section className="pd__section pd__section--white" id="product-details">
+                <div className="pd__section-inner pd__section-inner--narrow">
+                    <span className="pd__sec-badge">Legal &amp; Product Info</span>
+                    <h2 className="pd__sec-title">Product &amp; Manufacturer Details</h2>
+                    <p className="pd__legal-note">
+                        As required under the <strong>Drugs &amp; Cosmetics Rules, 1945 (Rule 148)</strong>, the following information is mandatorily disclosed for all cosmetic products sold online in India.
+                    </p>
+
+                    <div className="pd__legal-grid">
+                        {/* Brand / Ownership */}
+                        <div className="pd__legal-card">
+                            <div className="pd__legal-card-header">
+                                <span className="pd__legal-icon">🏷️</span>
+                                <h3 className="pd__legal-card-title">Brand / Ownership</h3>
+                            </div>
+                            <div className="pd__legal-card-body">
+                                <p className="pd__legal-brand-name">Sanjari Herbal Hair Oil</p>
+                                <address className="pd__legal-address">
+                                    31/A, Sitaram Bldg.,<br />
+                                    Opp. Police Commissioner Office,<br />
+                                    Crawford Market, Dr. D. N. Road,<br />
+                                    Mumbai – 400 001.
+                                </address>
+                                <p className="pd__legal-contact">
+                                    <span className="pd__legal-label">Contact:</span>
+                                    <a href="tel:+917867078601" className="pd__legal-link">+91 78670 78601</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Manufacturer */}
+                        <div className="pd__legal-card pd__legal-card--highlight">
+                            <div className="pd__legal-card-header">
+                                <span className="pd__legal-icon">🏭</span>
+                                <h3 className="pd__legal-card-title">Manufactured By</h3>
+                            </div>
+                            <div className="pd__legal-card-body">
+                                <p className="pd__legal-brand-name">Sufi Centre</p>
+                                <address className="pd__legal-address">
+                                    H. No. 936/2, Chhotani Compound,<br />
+                                    Narpoli, Bhiwandi,<br />
+                                    Dist: Thane – 421 302.
+                                </address>
+                                <div className="pd__lic-badge">
+                                    <span className="pd__lic-label">Manufacturing Licence No.</span>
+                                    <span className="pd__lic-number">25D-MH/103279</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p className="pd__legal-footer">
+                        This product complies with the <strong>Drugs &amp; Cosmetics Act, 1940</strong> and is classified under the <em>Hair &amp; Scalp Care</em> category (CDSCO). The manufacturing licence (Form COS-8) confirms that this product has undergone mandatory safety and quality validation.
+                    </p>
+                </div>
+            </section>
+
+            {/* ══════════════════════════════════════════════
                 SECTION 2.5 — BEFORE & AFTER
             ══════════════════════════════════════════════ */}
             <section className="pd__section" id="results" style={{ background: '#f9f9f9' }}>
@@ -1318,6 +1378,113 @@ export default function ProductPage() {
                     transition: color 0.2s;
                 }
                 .pd__faq-more-link:hover { color: #1a5c2a; }
+
+                /* ══ LEGAL / PRODUCT DETAILS ════════════════ */
+                .pd__legal-note {
+                    font-size: 0.9rem;
+                    color: #555;
+                    border-left: 3px solid #A5D6A7;
+                    padding-left: 14px;
+                    margin-bottom: 28px;
+                    line-height: 1.6;
+                }
+                .pd__legal-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                    margin-bottom: 28px;
+                }
+                @media (max-width: 640px) {
+                    .pd__legal-grid { grid-template-columns: 1fr; }
+                }
+                .pd__legal-card {
+                    border: 1px solid #C8E6C9;
+                    border-radius: 16px;
+                    overflow: hidden;
+                    background: #f7fdf7;
+                }
+                .pd__legal-card--highlight {
+                    border-color: #2d8a3e;
+                    background: #fff;
+                    box-shadow: 0 4px 18px rgba(45, 138, 62, 0.10);
+                }
+                .pd__legal-card-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    background: #E8F5E9;
+                    padding: 12px 18px;
+                    border-bottom: 1px solid #C8E6C9;
+                }
+                .pd__legal-card--highlight .pd__legal-card-header {
+                    background: #2d8a3e;
+                    border-bottom-color: #1a5c2a;
+                }
+                .pd__legal-icon { font-size: 1.15rem; }
+                .pd__legal-card-title {
+                    margin: 0;
+                    font-size: 0.85rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
+                    color: #1a5c2a;
+                }
+                .pd__legal-card--highlight .pd__legal-card-title { color: #fff; }
+                .pd__legal-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+                .pd__legal-brand-name {
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: #1a5c2a;
+                    margin: 0;
+                }
+                .pd__legal-address {
+                    font-style: normal;
+                    font-size: 0.85rem;
+                    color: #444;
+                    line-height: 1.75;
+                    margin: 0;
+                }
+                .pd__legal-contact {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.85rem;
+                    margin: 0;
+                }
+                .pd__legal-label { color: #666; font-weight: 600; }
+                .pd__legal-link { color: #2d8a3e; font-weight: 700; text-decoration: none; }
+                .pd__legal-link:hover { text-decoration: underline; }
+                .pd__lic-badge {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    background: linear-gradient(135deg, #1a5c2a, #2d8a3e);
+                    border-radius: 10px;
+                    padding: 12px 16px;
+                    margin-top: 4px;
+                }
+                .pd__lic-label {
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    color: rgba(255,255,255,0.75);
+                }
+                .pd__lic-number {
+                    font-size: 1.05rem;
+                    font-weight: 900;
+                    color: #fff;
+                    font-family: var(--font-poppins, Poppins, monospace);
+                    letter-spacing: 0.05em;
+                }
+                .pd__legal-footer {
+                    font-size: 0.82rem;
+                    color: #666;
+                    line-height: 1.65;
+                    border-top: 1px dashed #C8E6C9;
+                    padding-top: 20px;
+                    margin: 0;
+                }
 
                 /* ══ MOBILE STICKY BAR ══════════════════════ */
                 .pd__sticky-bar {

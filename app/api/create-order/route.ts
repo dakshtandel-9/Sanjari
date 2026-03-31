@@ -17,6 +17,7 @@ export async function POST(request: Request) {
             amount: (amount * 100).toString(), // amount in the smallest currency unit
             currency,
             receipt: nanoid(),
+            payment_capture: 1, // Auto-capture payment immediately after authorization
         };
 
         const order = await razorpay.orders.create(options);

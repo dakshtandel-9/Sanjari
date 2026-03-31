@@ -72,7 +72,7 @@ export async function POST(request: Request) {
                 if (razorpayOrderId && supabase) {
                     await supabase
                         .from("orders")
-                        .update({ status: "cancelled", payment_status: "failed" })
+                        .update({ status: "canceled", payment_status: "failed" })
                         .eq("razorpay_order_id", razorpayOrderId);
 
                     console.log("Webhook: Order marked failed for:", razorpayOrderId);

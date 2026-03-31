@@ -53,6 +53,7 @@ export default function AdminPage() {
     const [slides, setSlides] = useState<any[]>([]);
     const [contacts, setContacts] = useState<any[]>([]);
     const [shippingCharge, setShippingCharge] = useState("60");
+    const [productPrice, setProductPrice] = useState("349");
     const [adminOffers, setAdminOffers] = useState<string[]>([]);
     const [newOffer, setNewOffer] = useState("");
     const [suppressWarning, setSuppressWarning] = useState(false);
@@ -92,6 +93,7 @@ export default function AdminPage() {
         const data = await res.json();
         if (data.coupons) setCoupons(data.coupons);
         if (data.settings?.shipping_charge) setShippingCharge(data.settings.shipping_charge);
+        if (data.settings?.product_price) setProductPrice(data.settings.product_price);
         if (data.settings?.header_offers) {
             try {
                 const parsed = JSON.parse(data.settings.header_offers);
@@ -131,6 +133,13 @@ export default function AdminPage() {
     const updateShipping = async () => {
         const res = await fetch("/api/admin/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "setting", data: { key: "shipping_charge", value: shippingCharge } }) });
         if (res.ok) alert("Shipping charge updated!");
+    };
+
+    const updateProductPrice = async () => {
+        const price = parseInt(productPrice);
+        if (isNaN(price) || price < 1) { alert("Please enter a valid price greater than 0."); return; }
+        const res = await fetch("/api/admin/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "setting", data: { key: "product_price", value: String(price) } }) });
+        if (res.ok) alert("✅ Product price updated to ₹" + price + "! Changes will reflect on the store after a page refresh.");
     };
 
     const updateOffers = async (updatedOffers: string[]) => {
@@ -611,13 +620,37 @@ export default function AdminPage() {
                     {/* ── SETTINGS ── */}
                     {activeTab === "settings" && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+                            {/* ── Product Pricing ── */}
                             <div className="adm-card" style={{ maxWidth: 480 }}>
-                                <h2 className="adm-card__title">Store Settings</h2>
+                                <h2 className="adm-card__title">💰 Product Pricing</h2>
+                                <p className="adm-card__desc">Set the selling price of Sanjari Herbal Hair Oil. This will update across the product page, home page, and checkout.</p>
+                                <div className="adm-field">
+                                    <label className="adm-label">Product Price (₹)</label>
+                                    <div style={{ position: "relative" }}>
+                                        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", fontWeight: 700, color: "#2d8a3e", fontSize: "1rem" }}>₹</span>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={productPrice}
+                                            onChange={e => setProductPrice(e.target.value)}
+                                            className="adm-input"
+                                            style={{ paddingLeft: 28 }}
+                                        />
+                                    </div>
+                                    <p style={{ fontSize: "0.78rem", color: "#888", margin: "4px 0 0" }}>ℹ️ Currently shown price: <strong>₹{productPrice}</strong></p>
+                                </div>
+                                <button onClick={updateProductPrice} className="adm-btn--primary" style={{ width: "100%", marginTop: 8 }}>Update Product Price</button>
+                            </div>
+
+                            {/* ── Shipping Charge ── */}
+                            <div className="adm-card" style={{ maxWidth: 480 }}>
+                                <h2 className="adm-card__title">🚚 Shipping Settings</h2>
                                 <div className="adm-field">
                                     <label className="adm-label">COD Shipping Charge (₹)</label>
                                     <input type="number" value={shippingCharge} onChange={e => setShippingCharge(e.target.value)} className="adm-input" />
                                 </div>
-                                <button onClick={updateShipping} className="adm-btn--primary" style={{ width: "100%", marginTop: 8 }}>Save Settings</button>
+                                <button onClick={updateShipping} className="adm-btn--primary" style={{ width: "100%", marginTop: 8 }}>Save Shipping Settings</button>
                             </div>
 
                             <div className="adm-card" style={{ maxWidth: 600 }}>

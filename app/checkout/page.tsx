@@ -20,8 +20,9 @@ export default function CheckoutPage() {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [config, setConfig] = useState<{ shipping_charge: number; coupons: any[] }>({
+    const [config, setConfig] = useState<{ shipping_charge: number; product_price: number; coupons: any[] }>({
         shipping_charge: 60,
+        product_price: 349,
         coupons: [],
     });
     const [couponInput, setCouponInput] = useState("");
@@ -43,6 +44,7 @@ export default function CheckoutPage() {
                     const coupons = data.coupons || [];
                     setConfig({
                         shipping_charge: parseInt(data.settings.shipping_charge || "60"),
+                        product_price: parseInt(data.settings.product_price || "349"),
                         coupons: coupons,
                     });
 
@@ -80,7 +82,7 @@ export default function CheckoutPage() {
 
 
     /* ─── Derived prices ────────────────────────────────────────────────── */
-    const itemPrice = 349;
+    const itemPrice = config.product_price;
     const subtotal = itemPrice * quantity;
     const shippingFee = formData.paymentMethod === "cod" ? config.shipping_charge : 0;
     const totalPrice = Math.max(0, subtotal + shippingFee - discount);

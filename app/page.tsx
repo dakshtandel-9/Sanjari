@@ -41,7 +41,6 @@ const FAQS_SHORT = [
   { q: "Can I return it?", a: "Returns are not accepted once delivered. Replacement is available for damaged products reported within 24 hours." },
 ];
 
-const ITEM_PRICE = 349;
 
 /* ─────────────────────────── HELPERS ─────────────────────────── */
 function Stars({ count }: { count: number }) {
@@ -57,6 +56,7 @@ function Stars({ count }: { count: number }) {
 /* ─────────────────────────── PAGE ─────────────────────────── */
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [itemPrice, setItemPrice] = useState(349);
   const scrollRef = useRef<HTMLDivElement>(null);
   const reviewsScrollRef = useRef<HTMLDivElement>(null);
   const benefitsScrollRef = useRef<HTMLDivElement>(null);
@@ -91,6 +91,13 @@ export default function Home() {
       .then(r => r.json())
       .then(data => { if (data.slides) setSlides(data.slides); })
       .catch(() => { });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/admin/config")
+      .then(r => r.json())
+      .then(data => { if (data.settings?.product_price) setItemPrice(parseInt(data.settings.product_price) || 349); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -435,6 +442,17 @@ export default function Home() {
                 <p>Leave for a few hours or overnight, then wash with a mild shampoo. Best used 2–3 times a week.</p>
               </div>
             </div>
+            <div className="pd__step-connector" aria-hidden="true" />
+            <div className="pd__step">
+              <div className="pd__step-num">04</div>
+              <div className="pd__step-icon-wrap">
+                <Image src="/HowToUse/3.png" alt="Night application" width={44} height={44} className="pd__step-img" />
+              </div>
+              <div className="pd__step-body">
+                <strong>Best Before Sleep 🌙</strong>
+                <p>For best results, apply before bedtime and let the oil work overnight — your hair absorbs the nutrients while you rest.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -550,7 +568,7 @@ export default function Home() {
       <div className="pd__sticky-bar" aria-label="Quick purchase">
         <div className="pd__sticky-info">
           <strong className="pd__sticky-name">Sanjari Hair Oil</strong>
-          <span className="pd__sticky-price">₹{ITEM_PRICE}</span>
+          <span className="pd__sticky-price">₹{itemPrice}</span>
         </div>
         <button onClick={buyNow} className="pd__sticky-btn">
           Buy Now
@@ -1225,11 +1243,11 @@ function ContactSection() {
               <span className="hp__contact-link-icon">📧</span>
               support@sanjariherbalhairoil.com
             </a>
-            <a href="tel:+919876543210" className="hp__contact-link">
+            <a href="tel:+917867078601" className="hp__contact-link">
               <span className="hp__contact-link-icon">📞</span>
-              +91 98765 43210
+              +91 78670 78601
             </a>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="hp__contact-link">
+            <a href="https://wa.me/917867078601" target="_blank" rel="noopener noreferrer" className="hp__contact-link">
               <span className="hp__contact-link-icon">💬</span>
               WhatsApp Us
             </a>

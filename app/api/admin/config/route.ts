@@ -38,7 +38,9 @@ export async function POST(request: Request) {
                 if (error) throw error;
             }
         } else if (type === "setting") {
-            const { error } = await supabase.from("settings").upsert({ key: data.key, value: data.value });
+            const { error } = await supabase
+                .from("settings")
+                .upsert({ key: data.key, value: data.value }, { onConflict: "key" });
             if (error) throw error;
         }
 

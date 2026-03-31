@@ -41,7 +41,6 @@ const FAQS_SHORT = [
     { q: "Can I return it?", a: "Returns are not accepted once delivered. Replacement is available for damaged products reported within 24 hours." },
 ];
 
-const ITEM_PRICE = 349;
 const SHIPPING = 60;
 
 /* ─────────────────────────── HELPERS ─────────────────────────── */
@@ -58,6 +57,7 @@ function Stars({ count }: { count: number }) {
 /* ─────────────────────────── PAGE ─────────────────────────── */
 export default function ProductPage() {
     const [qty, setQty] = useState(1);
+    const [itemPrice, setItemPrice] = useState(349);
     const [coupon, setCoupon] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
     const [discount, setDiscount] = useState(0);
@@ -68,8 +68,19 @@ export default function ProductPage() {
     const reviewsScrollRef = useRef<HTMLDivElement>(null);
     const benefitsScrollRef = useRef<HTMLDivElement>(null);
 
-    const total = Math.max(0, ITEM_PRICE * qty - discount);
+    const total = Math.max(0, itemPrice * qty - discount);
 
+    // Fetch product price from admin settings
+    useEffect(() => {
+        fetch("/api/admin/config")
+            .then(r => r.json())
+            .then(data => {
+                if (data.settings?.product_price) {
+                    setItemPrice(parseInt(data.settings.product_price) || 349);
+                }
+            })
+            .catch(() => {});
+    }, []);
 
     const applyCoupon = async () => {
         if (!coupon.trim()) { setCouponMsg({ type: "err", text: "Enter a coupon code." }); return; }
@@ -96,12 +107,12 @@ export default function ProductPage() {
     useEffect(() => {
         if (appliedCoupon) {
             const disc = appliedCoupon.type === "percentage"
-                ? Math.round((ITEM_PRICE * qty) * appliedCoupon.discount_value / 100)
+                ? Math.round((itemPrice * qty) * appliedCoupon.discount_value / 100)
                 : appliedCoupon.discount_value;
             setDiscount(disc);
             setCouponMsg({ type: "ok", text: `Applied! -₹${disc} off` });
         }
-    }, [qty, appliedCoupon]);
+    }, [qty, appliedCoupon, itemPrice]);
 
 
     const buyNow = () => {
@@ -329,7 +340,7 @@ export default function ProductPage() {
 
                         {/* Price */}
                         <div className="pd__price-block">
-                            <span className="pd__price-main">₹{ITEM_PRICE}</span>
+                            <span className="pd__price-main">₹{itemPrice}</span>
                             <div className="pd__price-meta">
                                 <span className="pd__price-ship">+ ₹{SHIPPING} shipping (COD) · Free for prepaid</span>
                             </div>
@@ -620,6 +631,17 @@ export default function ProductPage() {
                                 <p>Leave for a few hours or overnight, then wash with a mild shampoo. Best used 2–3 times a week.</p>
                             </div>
                         </div>
+                        <div className="pd__step-connector" aria-hidden="true" />
+                        <div className="pd__step">
+                            <div className="pd__step-num">04</div>
+                            <div className="pd__step-icon-wrap">
+                                <Image src="/HowToUse/3.png" alt="Night application" width={44} height={44} className="pd__step-img" />
+                            </div>
+                            <div className="pd__step-body">
+                                <strong>Best Before Sleep 🌙</strong>
+                                <p>For best results, apply before bedtime and let the oil work overnight — your hair absorbs the nutrients while you rest.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -731,7 +753,7 @@ export default function ProductPage() {
             <div className="pd__sticky-bar" aria-label="Quick purchase">
                 <div className="pd__sticky-info">
                     <strong className="pd__sticky-name">Sanjari Hair Oil</strong>
-                    <span className="pd__sticky-price">₹{ITEM_PRICE}</span>
+                    <span className="pd__sticky-price">₹{itemPrice}</span>
                 </div>
                 <button onClick={buyNow} className="pd__sticky-btn">
                     Buy Now
